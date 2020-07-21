@@ -18,7 +18,7 @@ export default class Parser {
     this.callbacks.afterCommand = callback
   }
 
-  onCommand(commandString) {
+  handleCommand(commandString) {
     if(!this.engine)
       throw new Error('Parser has no command engine')
 
@@ -26,8 +26,15 @@ export default class Parser {
       throw new Error('Parser has no state container')
 
     // TODO: Parse command - at this layer ensure subject, object, and verb are defined
-    const action = {};
+    const action = {type: 'player'};
+    this._processAction(action)
+  }
 
+  start() {
+    this._processAction({type: 'internal', verb: 'playStarted'})
+  }
+
+  _processAction(action) {
     // Pass to actions
     const draftState = this.gameState.getDraft()
     const {messages, resultCode} = this.engine.run(action, draftState)
@@ -40,6 +47,7 @@ export default class Parser {
       this.callbacks.afterCommand(messages)
     else
       console.error('Parser has no afterCommand callback registered')
+
   }
 
   setGameState(gameState) {

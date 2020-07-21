@@ -1,16 +1,26 @@
 import autoBind from 'auto-bind'
 
+import coreRules from './rules/core'
+import gameRules from './rules/game'
+
 export default class RuleEngine {
   constructor() {
     this.rules = []
 
     autoBind(this)
+
+    this.defineRules(coreRules)
+    this.defineRules(gameRules)
   }
 
-  defineRule({location, verb, subject, object, filter, hooks}) {
+  defineRule({type, location, verb, subject, object, filter, hooks}) {
     this.rules.push({
-      location, verb, subject, object, filter, hooks
+      type, location, verb, subject, object, filter, hooks
     })
+  }
+
+  defineRules(rules) {
+    rules.forEach(this.defineRule)
   }
 
   run(action, state) {
@@ -18,11 +28,11 @@ export default class RuleEngine {
       throw new Error('Rules engine has no rules')
 
     const applicableRules = this.rules.filter(rule => {
+      if(rule.type &&     !testType(state, action, rule))     return false;
       if(rule.location && !testLocation(state, action, rule)) return false;
       if(rule.verb &&     !testVerb(state, action, rule))     return false;
       if(rule.subject &&  !testSubject(state, action, rule))  return false;
       if(rule.object &&   !testObject(state, action, rule))   return false;
-      if(rule.filter &&   !rule.filter(state, action))  return false;
 
       return true;
     })
@@ -31,15 +41,15 @@ export default class RuleEngine {
 
     try {
       console.log('executing before hooks')
-      const beforeHooks = applicableRules.map(rule => rule.hooks.before).filter(a => a !== undefined)
+      const beforeHooks = applicableRules.map(rule => rule.hooks?.before).filter(a => a !== undefined)
       runHooks(beforeHooks, messages, state, action)
 
       console.log('executing during hooks')
-      const duringHooks = applicableRules.map(rule => rule.hooks.during).filter(a => a !== undefined)
-      runHooks(duringHooks, messages, state, action)
+      const carryOut = applicableRules.map(rule => rule.hooks?.carryOut).filter(a => a !== undefined)
+      runHooks(carryOut, messages, state, action)
 
       console.log('executing after hooks')
-      const afterHooks = applicableRules.map(rule => rule.hooks.after).filter(a => a !== undefined)
+      const afterHooks = applicableRules.map(rule => rule.hooks?.after).filter(a => a !== undefined)
       runHooks(afterHooks, messages, state, action)
     } catch (err) {
       console.error('Rules stopped')
@@ -55,6 +65,7 @@ RuleEngine.SUCCESS = 'success'
 RuleEngine.FAILURE = 'failure'
 
 // TODO: Apply rules conditionally depending on state, location, verb, etc
+function testType(state, action, rule) { return true }
 function testLocation(state, action, rule) { return true }
 function testVerb(state, action, rule) { return true }
 function testSubject(state, action, rule) { return true }
