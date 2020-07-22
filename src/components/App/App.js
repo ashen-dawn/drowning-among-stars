@@ -1,4 +1,5 @@
 import React, {useRef, useEffect} from 'react';
+import ReactMarkdown from 'react-markdown'
 import styles from './App.module.css';
 
 function App({onCommand, messages, state}) {
@@ -8,9 +9,17 @@ function App({onCommand, messages, state}) {
   function onSubmit(ev) {
     if(ev) ev.preventDefault();
 
+    if(!inputRef.current?.value.trim())
+      return;
+
     if(inputRef.current){
       onCommand(inputRef.current.value)
       inputRef.current.value = ''
+    }
+
+    if(playAreaRef.current) {
+      const viewArea = playAreaRef.current.firstChild;
+      setImmediate(() => viewArea.scrollTop = viewArea.scrollHeight)
     }
   }
 
@@ -31,12 +40,12 @@ function App({onCommand, messages, state}) {
     <div className={styles.app}>
       <div ref={playAreaRef} className={styles.playArea}>
         <div className={styles.output}>
-          {messages.map((message) => {
+          {messages.map((message, i) => {
             if(message.type === 'message')
-              return <p>{message.message}</p>
+              return <ReactMarkdown key={i}>{message.message}</ReactMarkdown>
 
             if(message.type === 'command')
-              return <p className={styles.command}>{message.command}</p>
+              return <p key={i} className={styles.command}>{message.command}</p>
 
             return null
           })}

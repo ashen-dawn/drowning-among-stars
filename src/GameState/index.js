@@ -4,6 +4,7 @@ import produce, {createDraft, finishDraft} from 'immer'
 export default class GameState {
   constructor() {
     this.state = finishDraft(createDraft({
+      directions: ['north', 'south', 'east', 'west'],
       player: {
         location: 'empty'
       },
@@ -58,5 +59,31 @@ export default class GameState {
       throw new Error('Player cannot be in invalid location')
 
     this.state = newState
+  }
+
+  filterCommandParsingsByValidNouns(parsings) {
+    return parsings.filter(({tokens}) => {
+      let nounExpressions = tokens.filter(token => token.type === 'expression')
+
+      for(const expression of nounExpressions) {
+        const itemType = expression.name
+        const itemName = expression.value
+
+        // TODO: Add options for several names
+        if(itemType === 'direction' && !this.state.directions.includes(itemName))
+          return false;
+
+        if(itemType === 'door' && !Object.values(this.state.locations).filter(loc => loc.type === 'door').map(door => door.name).includes(itemName))
+          return false;
+
+        if(itemType === 'room' && !Object.values(this.state.locations).filter(loc => loc.type === 'room').map(door => door.name).includes(itemName))
+          return false;
+
+        if(itemType === 'item' && !Object.values(this.state.items).map(item => item.name).includes(itemName))
+          return false;
+      }
+
+      return true;
+    })
   }
 }
