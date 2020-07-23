@@ -1,10 +1,11 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import ReactMarkdown from 'react-markdown'
 import styles from './App.module.css';
 
-function App({onCommand, messages, state}) {
+function App({onCommand, messages, game}) {
   const inputRef = useRef()
   const playAreaRef = useRef()
+  const [state, setState] = useState({})
 
   function onSubmit(ev) {
     if(ev) ev.preventDefault();
@@ -36,6 +37,14 @@ function App({onCommand, messages, state}) {
     return () => playArea.removeEventListener('click', onClick)
   }, [])
 
+  useEffect(() => {
+    game.onChange(setState)
+    game.getState()
+    game.saveDraft()
+  }, [game])
+
+  const {directions, ...printedState} = state
+
   return (
     <div className={styles.app}>
       <div ref={playAreaRef} className={styles.playArea}>
@@ -56,7 +65,7 @@ function App({onCommand, messages, state}) {
       </div>
       <div className={styles.infoArea}>
         <pre>
-          {JSON.stringify(state, null, 2)}
+          {JSON.stringify(printedState, jsonReplacer, 2)}
         </pre>
       </div>
     </div>
@@ -64,3 +73,16 @@ function App({onCommand, messages, state}) {
 }
 
 export default App;
+
+function jsonReplacer(key, value) {
+  if(value instanceof Set)
+    return Array.from(value)
+
+  if(value instanceof Map)
+    return Array.from(value).reduce((obj, [key, value]) => {
+      obj[key] = value;
+      return obj;
+    }, {});
+
+  return value
+}
