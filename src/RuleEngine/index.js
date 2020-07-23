@@ -65,7 +65,7 @@ RuleEngine.SUCCESS = 'success'
 RuleEngine.FAILURE = 'failure'
 
 // TODO: Apply rules conditionally depending on state, location, verb, etc
-function testType(state, action, rule) { return true }
+function testType(state, action, rule) { return action.type === rule.type }
 function testLocation(state, action, rule) { return true }
 function testVerb(state, action, rule) { return true }
 function testSubject(state, action, rule) { return true }

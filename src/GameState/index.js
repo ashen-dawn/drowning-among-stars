@@ -73,14 +73,29 @@ export default class GameState {
         if(itemType === 'direction' && !this.state.directions.includes(itemName))
           return false;
 
-        if(itemType === 'door' && !Object.values(this.state.locations).filter(loc => loc.type === 'door').map(door => door.name).includes(itemName))
-          return false;
+        if(itemType === 'door') {
+          const door = Object.values(this.state.locations).filter(loc => loc.type === 'door').find(door => itemName === door.name)
+          if(door)
+            expression.id = door.id
+          else
+            return false;
+        }
 
-        if(itemType === 'room' && !Object.values(this.state.locations).filter(loc => loc.type === 'room').map(door => door.name).includes(itemName))
-          return false;
+        if(itemType === 'room') {
+          const room = Object.values(this.state.locations).filter(loc => loc.type === 'room').find(room => itemName === room.name)
+          if(room)
+            expression.id = room.id
+          else
+            return false;
+        }
 
-        if(itemType === 'item' && !Object.values(this.state.items).map(item => item.name).includes(itemName))
-          return false;
+        if(itemType === 'item') {
+          const item = Object.values(this.state.items).find(item => itemName === item.name)
+          if(item)
+            expression.id = item.id
+          else
+            return false;
+        }
       }
 
       return true;

@@ -52,10 +52,13 @@ export default class Parser {
 
     const [command] = validParsings
     const {verb, tokens} = command
-    const subject = tokens.filter(({type, position}) => (type === 'expression' && position === 'subject'))[0]?.value
-    const object =  tokens.filter(({type, position}) => (type === 'expression' && position === 'object' ))[0]?.value
+    const subject = tokens.filter(({type, position}) => (type === 'expression' && position === 'subject'))[0]
+    const object =  tokens.filter(({type, position}) => (type === 'expression' && position === 'object' ))[0]
 
     const action = {type: 'player', verb, subject, object};
+    action.getSubject = () => subject.id
+    action.getObject = () => object.id
+
     console.log(action)
     this._processAction(action)
   }

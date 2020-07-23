@@ -40,7 +40,8 @@ export default [{
       state.items['brass key'] = {
         id: 'brass key',
         name: 'brass key',
-        description: 'A heavy brass key'
+        description: 'A heavy brass key',
+        location: 'safe'
       }
     }
   }
