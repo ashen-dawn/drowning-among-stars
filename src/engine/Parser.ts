@@ -2,6 +2,7 @@ import Game from "./Game";
 import RulesEngine from './RulesEngine'
 import ParsedCommand, { InvalidCommandDetails } from "./types/ParsedCommand";
 import Verb from './types/Verb';
+import VerbBuilder from "./types/VerbBuilder";
 
 export default class Parser {
   private game : Game
@@ -27,7 +28,7 @@ export default class Parser {
     if(validationResult.validCommands.length < 1) {
       this.handleError(validationResult.invalidCommands)
     } else {
-      // TODO: Do the thing
+      this.engine.runCommand(validationResult.validCommands[0])
     }
 
     this.game.saveDraft()
@@ -69,18 +70,5 @@ export default class Parser {
     const verb = new Verb(name)
     this.verbs.push(verb)
     return new VerbBuilder(verb)
-  }
-}
-
-class VerbBuilder {
-  private verb : Verb
-
-  constructor(verb : Verb) {
-    this.verb = verb
-  }
-
-  as(template : string) : VerbBuilder {
-    this.verb.understand(template)
-    return this
   }
 }

@@ -1,15 +1,28 @@
-import ParsedCommand, {TokenType, ParsedTokenLiteral, ParsedTokenExpression} from './ParsedCommand'
+import ParsedCommand, {TokenType, ParsedTokenLiteral, ParsedTokenExpression, ValidCommandDetails} from './ParsedCommand'
 import NounPosition from './NounPosition'
 import { ObjectType } from './GameState'
+import Game from "../Game"
+
+export type VerbAction = (action : ValidCommandDetails, game : Game) => void
 
 export default class Verb {
   static expressionRegex = /^\[([a-z|]+)\]$/
+  private templates : Template[] = []
 
   readonly name : string
-  private templates : Template[] = []
+
+  private hooks : {before: VerbAction[], after : VerbAction[], carryOut: VerbAction[]} = {
+    before: [],
+    after: [],
+    carryOut: []
+  }
 
   constructor(name : string) {
     this.name = name
+  }
+
+  on(type : 'before' | 'after' | 'carryOut', action : VerbAction) {
+    this.hooks[type].push(action)
   }
 
   understand(templateString : string) {
