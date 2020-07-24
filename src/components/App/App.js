@@ -2,10 +2,11 @@ import React, {useRef, useEffect, useState} from 'react';
 import ReactMarkdown from 'react-markdown'
 import styles from './App.module.css';
 
-function App({onCommand, messages, game}) {
+function App({onCommand, game}) {
   const inputRef = useRef()
   const playAreaRef = useRef()
   const [state, setState] = useState({})
+  const messages = state.messages || []
 
   function onSubmit(ev) {
     if(ev) ev.preventDefault();
@@ -83,6 +84,9 @@ function jsonReplacer(key, value) {
       obj[key] = value;
       return obj;
     }, {});
+
+  if(key === 'messages' && Array.isArray(value) && value.length)
+    return ['...']
 
   return value
 }

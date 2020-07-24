@@ -1,3 +1,5 @@
+import GameEvent from './GameEvent'
+
 type GameState = {
   readonly directions: Map<ObjectID, Direction>,
   readonly rooms: Map<ObjectID, Room>,
@@ -6,6 +8,7 @@ type GameState = {
   readonly player: {
     readonly location: ObjectID
   }
+  readonly messages: GameEvent []
 }
 
 export default GameState

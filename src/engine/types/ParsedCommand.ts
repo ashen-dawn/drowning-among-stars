@@ -54,6 +54,10 @@ export default class ParsedCommand {
     this.verb = verb
   }
 
+  getNumTokens() : number {
+    return this.tokens.length
+  }
+
   prepend(token : ParsedToken) {
     const newCommand = new ParsedCommand(this.verb)
     newCommand.tokens = [token, ...this.tokens]
@@ -65,7 +69,7 @@ export default class ParsedCommand {
 
     let subject : GameObject | null = null
     let object : GameObject | null = null
-    
+
     for(const noun of nouns) {
       let gameObject = game.findObjectByName(noun.name, noun.itemType)
       if(!gameObject)
@@ -76,11 +80,14 @@ export default class ParsedCommand {
           severity: ParsingErrorSeverity.NoSuchObject
         }
 
+      // TODO: Optionally print "the" depending on if the original
+      // command name had one at the beginning (don't print the the book)
+      // (but also don't do "you cannot see heart of the cards")
       if(!game.isVisible(gameObject))
         return {
           isValid: false,
           command: this,
-          reason: `You cannot see ${noun.name}`,
+          reason: `You cannot see the ${noun.name}`,
           severity: ParsingErrorSeverity.NotVisible
         }
 

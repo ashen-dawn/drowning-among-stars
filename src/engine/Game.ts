@@ -1,6 +1,7 @@
 import {enableMapSet, createDraft, finishDraft, Draft} from 'immer'
 import GameState, { GameObject, Room, Door, Item, ObjectType } from './types/GameState'
-import ParsedCommand, { TokenType, ParsedTokenExpression, ValidCommandDetails, InvalidCommandDetails } from './types/ParsedCommand'
+import ParsedCommand, { ValidCommandDetails, InvalidCommandDetails } from './types/ParsedCommand'
+import { GameEventMessage, GameEventCommand } from './types/GameEvent'
 
 enableMapSet()
 
@@ -13,7 +14,15 @@ export type CommandValidateResult = {
 }
 
 export default class Game {
-  private gameState : GameState = {directions: new Map(), rooms: new Map(), doors: new Map(), items: new Map(), player: {location: ''}}
+  private gameState : GameState = {
+    directions: new Map(),
+    rooms: new Map(),
+    doors: new Map(),
+    items: new Map(),
+    player: {location: ''},
+    messages: []
+  }
+
   private draft : Draft<GameState> | null = null
   private onChangeListeners : ChangeListener [] = []
 
@@ -27,6 +36,16 @@ export default class Game {
     state.directions.set('up', {type: ObjectType.Direction, name: 'up', aliases: ['u']})
     state.directions.set('down', {type: ObjectType.Direction, name: 'down', aliases: ['d']})
     this.saveDraft()
+  }
+
+  outputCommand(commandString: string) {
+    const state = this.getState()
+    state.messages.push(new GameEventCommand(commandString))
+  }
+
+  say(message: string) {
+    const state = this.getState()
+    state.messages.push(new GameEventMessage(message))
   }
 
   filterValidCommands(commands: ParsedCommand[]) : CommandValidateResult {
@@ -43,7 +62,12 @@ export default class Game {
       }
     }
 
-    invalidCommands.sort((a,b) => a.severity - b.severity)
+    invalidCommands.sort((a,b) => {
+      if(a.severity !== b.severity)
+        return a.severity - b.severity
+
+      return b.command.getNumTokens() - a.command.getNumTokens()
+    })
 
     return {validCommands, invalidCommands}
   }
@@ -104,15 +128,15 @@ export default class Game {
       case ObjectType.Door:
         collection = this.getState().doors
         break
-        
+
       case ObjectType.Item:
         collection = this.getState().items
         break
-      
+
       case ObjectType.Room:
         collection = this.getState().rooms
         break
-    
+
       case ObjectType.Direction:
         collection = this.getState().directions
         break
@@ -123,7 +147,7 @@ export default class Game {
     const exactMatch = objects.find((object) => name === object.name)
     if(exactMatch)
       return exactMatch
-    
+
     const aliasMatch = objects.find(({aliases}) => aliases.includes(name))
     if(aliasMatch)
       return aliasMatch

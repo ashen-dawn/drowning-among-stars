@@ -86,6 +86,13 @@ game.addItem({
   location: 'entry'
 })
 
+game.addItem({
+  type: ObjectType.Item,
+  name: 'ruby',
+  aliases: ['gem'],
+  location: 'office'
+})
+
 game.getState().player.location = 'entry'
 
 game.saveDraft()

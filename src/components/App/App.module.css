@@ -48,6 +48,8 @@
 .infoArea {
   width: 300px;
   overflow-x: hidden;
+  overflow-y: scroll;
+  max-height: 100vh;
 }
 
 .command {

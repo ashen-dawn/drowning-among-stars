@@ -32,7 +32,7 @@ export default class Renderer {
   private render() {
     ReactDOM.render(
       <React.StrictMode>
-        <App messages={this.output} game={this.game} onCommand={this.handleCommand.bind(this)}/>
+        <App game={this.game} onCommand={this.handleCommand.bind(this)}/>
       </React.StrictMode>,
       document.getElementById('root')
     )

@@ -1,6 +1,6 @@
 import Game from "./Game";
 import RulesEngine from './RulesEngine'
-import ParsedCommand from "./types/ParsedCommand";
+import ParsedCommand, { InvalidCommandDetails } from "./types/ParsedCommand";
 import Verb from './types/Verb';
 
 export default class Parser {
@@ -14,6 +14,8 @@ export default class Parser {
   }
 
   handleCommand(rawCommand : string) {
+    this.game.outputCommand(rawCommand)
+
     // Parse command for syntactical validity
     // (according to known verb templates)
     const grammaticalParsings : ParsedCommand[] = this.parseCommandString(rawCommand)
@@ -21,6 +23,15 @@ export default class Parser {
     // Ask the game state container to filter commands for object validity
     // (nouns refer to valid objects, all objects are visible, etc)
     const validationResult = this.game.filterValidCommands(grammaticalParsings)
+
+    if(validationResult.validCommands.length < 1) {
+      this.handleError(validationResult.invalidCommands)
+    } else {
+      // TODO: Do the thing
+    }
+
+    this.game.saveDraft()
+
     console.log(validationResult)
   }
 
@@ -33,6 +44,25 @@ export default class Parser {
     }
 
     return parsings
+  }
+
+  handleError(invalidCommands: InvalidCommandDetails []) {
+    console.log(invalidCommands)
+
+    if(!invalidCommands.length){
+      this.game.say("I'm unsure what you're trying to do")
+      return
+    }
+
+    const mostValid = invalidCommands[0]
+
+    if(mostValid.command.verb.name === 'go'){
+      this.game.say("I'm unsure what you're trying to do")
+      return
+    }
+
+    this.game.say(mostValid.reason)
+    console.log(mostValid)
   }
 
   understand(name : string) : VerbBuilder {

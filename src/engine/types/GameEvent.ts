@@ -3,24 +3,28 @@ export enum GameEventType {
   Command = 'command'
 }
 
-export default interface GameEvent {
-  getType() : GameEventType;
+export default class GameEvent {
+  readonly type : GameEventType
+
+  constructor(type : GameEventType) {
+    this.type = type
+  }
 }
 
-export class GameEventMessage implements GameEvent {
-  private message : string
+export class GameEventMessage extends GameEvent {
+  readonly message : string
 
-  getType() : GameEventType { return GameEventType.Message }
   constructor(message : string) {
+    super(GameEventType.Message)
     this.message = message
   }
 }
 
-export class GameEventCommand implements GameEvent {
-  private rawCommand : string
+export class GameEventCommand extends GameEvent {
+  readonly command : string
 
-  getType() : GameEventType { return GameEventType.Command }
-  constructor(rawCommand : string) {
-    this.rawCommand = rawCommand
+  constructor(command : string) {
+    super(GameEventType.Command)
+    this.command = command
   }
 }
