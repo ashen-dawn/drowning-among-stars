@@ -1,8 +1,11 @@
 type GameState = {
-  readonly directions: Map<ObjectID, GameObject>,
-  readonly rooms: Map<ObjectID, GameObject>,
-  readonly doors: Map<ObjectID, GameObject>,
-  readonly items: Map<ObjectID, GameObject>
+  readonly directions: Map<ObjectID, Direction>,
+  readonly rooms: Map<ObjectID, Room>,
+  readonly doors: Map<ObjectID, Door>,
+  readonly items: Map<ObjectID, Item>,
+  readonly player: {
+    readonly location: ObjectID
+  }
 }
 
 export default GameState
@@ -16,21 +19,29 @@ export enum ObjectType {
 
 type ObjectID = string
 
-type GameObject = {
+export type GameObject = {
   readonly type : ObjectType,
   readonly name : ObjectID,
   readonly aliases : string[]
 }
 
+export type Direction = GameObject & {
+  readonly type : ObjectType.Direction
+}
+
 export type Room = GameObject & {
+  readonly type : ObjectType.Room,
   readonly neighbors : Map<ObjectID, ObjectID>
 }
 
-export type Door = Room & {
+export type Door = GameObject & {
+  readonly type : ObjectType.Door,
+  readonly neighbors : Map<ObjectID, ObjectID>
   readonly locked : boolean,
   readonly key : ObjectID
 }
 
 export type Item = GameObject & {
+  readonly type : ObjectType.Item,
   readonly location: ObjectID | 'inventory'
 }

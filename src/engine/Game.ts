@@ -1,12 +1,19 @@
 import {enableMapSet, createDraft, finishDraft, Draft} from 'immer'
-import GameState, { Room, Door, Item, ObjectType } from './types/GameState'
+import GameState, { GameObject, Room, Door, Item, ObjectType } from './types/GameState'
+import ParsedCommand, { TokenType, ParsedTokenExpression, ValidCommandDetails, InvalidCommandDetails } from './types/ParsedCommand'
 
 enableMapSet()
 
 type ChangeListener = (state : GameState) => void
 
+
+export type CommandValidateResult = {
+  validCommands: ValidCommandDetails [],
+  invalidCommands: InvalidCommandDetails []
+}
+
 export default class Game {
-  private gameState : GameState = {directions: new Map(), rooms: new Map(), doors: new Map(), items: new Map()}
+  private gameState : GameState = {directions: new Map(), rooms: new Map(), doors: new Map(), items: new Map(), player: {location: ''}}
   private draft : Draft<GameState> | null = null
   private onChangeListeners : ChangeListener [] = []
 
@@ -20,6 +27,25 @@ export default class Game {
     state.directions.set('up', {type: ObjectType.Direction, name: 'up', aliases: ['u']})
     state.directions.set('down', {type: ObjectType.Direction, name: 'down', aliases: ['d']})
     this.saveDraft()
+  }
+
+  filterValidCommands(commands: ParsedCommand[]) : CommandValidateResult {
+    let validCommands : ValidCommandDetails[] = []
+    let invalidCommands : InvalidCommandDetails[] = []
+
+    for(const command of commands) {
+      const commandValidationResult = command.areNounsValid(this)
+
+      if(commandValidationResult.isValid){
+        validCommands.push(commandValidationResult)
+      } else {
+        invalidCommands.push(commandValidationResult)
+      }
+    }
+
+    invalidCommands.sort((a,b) => a.severity - b.severity)
+
+    return {validCommands, invalidCommands}
   }
 
   onChange(callback : ChangeListener) {
@@ -51,6 +77,12 @@ export default class Game {
     return this.draft!
   }
 
+  getCurrentRoom() : Draft<Room> | null {
+    const state = this.getState()
+    return Array.from(state.rooms.values())
+    .find(room => room.name === state.player.location) || null
+  }
+
   addRoom(room : Room) {
     let state = this.getState()
     state.rooms.set(room.name, room)
@@ -64,5 +96,69 @@ export default class Game {
   addItem(item: Item) {
     let state = this.getState()
     state.items.set(item.name, item)
+  }
+
+  findObjectByName(name : string, type : ObjectType) : GameObject | null {
+    let collection
+    switch(type) {
+      case ObjectType.Door:
+        collection = this.getState().doors
+        break
+        
+      case ObjectType.Item:
+        collection = this.getState().items
+        break
+      
+      case ObjectType.Room:
+        collection = this.getState().rooms
+        break
+    
+      case ObjectType.Direction:
+        collection = this.getState().directions
+        break
+    }
+
+    const objects = [...collection!.values()]
+
+    const exactMatch = objects.find((object) => name === object.name)
+    if(exactMatch)
+      return exactMatch
+    
+    const aliasMatch = objects.find(({aliases}) => aliases.includes(name))
+    if(aliasMatch)
+      return aliasMatch
+
+    return null
+  }
+
+  isVisible(object : GameObject) : boolean {
+    const state = this.getState()
+    const currentRoom = this.getCurrentRoom()
+
+    switch(object.type) {
+      case ObjectType.Direction:
+        return true
+
+      case ObjectType.Room:
+        return state.player.location === (object as Room).name
+
+      case ObjectType.Door:
+        if(!currentRoom)
+          return false;
+
+        const neighborIDs = Array.from(currentRoom.neighbors.values())
+
+        let neighbors = neighborIDs.map(name => state.doors.get(name)).filter(object => object !== undefined).map(o => o!)
+        for(const neighbor of neighbors)
+          if(neighbor.name === object.name)
+            return true;
+        return false
+
+      case ObjectType.Item:
+        return state.player.location === (object as Item).location
+
+      default:
+        return false
+    }
   }
 }

@@ -16,6 +16,16 @@ parser.understand('look')
 parser.understand('lookDirection')
   .as('look [direction]')
 
+parser.understand('lookAt')
+  .as('look [item]')
+  .as('look [door]')
+  .as('look at [item]')
+  .as('look at [door]')
+  .as('examine [item]')
+  .as('examine [door]')
+  .as('x [item]')
+  .as('x [door]')
+
 parser.understand('go')
   .as('go [direction]')
   .as('[direction]')
@@ -75,6 +85,8 @@ game.addItem({
   aliases: ['key'],
   location: 'entry'
 })
+
+game.getState().player.location = 'entry'
 
 game.saveDraft()
 

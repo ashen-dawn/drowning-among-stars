@@ -14,10 +14,14 @@ export default class Parser {
   }
 
   handleCommand(rawCommand : string) {
+    // Parse command for syntactical validity
+    // (according to known verb templates)
     const grammaticalParsings : ParsedCommand[] = this.parseCommandString(rawCommand)
-    console.log(grammaticalParsings)
 
-    // const validParsings : ParsedCommand[] = this.game.filterCommandsForValidity(grammaticalParsings)
+    // Ask the game state container to filter commands for object validity
+    // (nouns refer to valid objects, all objects are visible, etc)
+    const validationResult = this.game.filterValidCommands(grammaticalParsings)
+    console.log(validationResult)
   }
 
   parseCommandString(rawCommand: string): ParsedCommand[] {
