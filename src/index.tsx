@@ -5,9 +5,9 @@ import RulesEngine from './engine/RulesEngine'
 import { ObjectType, Room, Door } from './engine/types/GameState'
 
 let game = new Game()
-let rules = new RulesEngine()
+let rules = new RulesEngine(game)
 let parser = new Parser(game, rules)
-let renderer = new Renderer(parser, game)
+let renderer = new Renderer(parser, game, rules)
 
 parser.understand('look')
   .as('look')
@@ -51,7 +51,8 @@ const entry : Room = {
   type: ObjectType.Room,
   name: 'entry',
   aliases: [],
-  neighbors: new Map()
+  neighbors: new Map(),
+  description: 'A tight corridor with yellow faded walls.'
 }
 
 const door : Door = {
@@ -60,14 +61,16 @@ const door : Door = {
   aliases: ['white door'],
   neighbors: new Map(),
   locked: true,
-  key: 'brass key'
+  key: 'brass key',
+  description: 'A large white door with but a single keybole.'
 }
 
 const office : Room = {
   type: ObjectType.Room,
   name: 'office',
   aliases: [],
-  neighbors: new Map()
+  neighbors: new Map(),
+  description: 'An opulent office'
 }
 
 entry.neighbors.set('east', 'door')

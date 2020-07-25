@@ -25,7 +25,9 @@ type ObjectID = string
 export type GameObject = {
   readonly type : ObjectType,
   readonly name : ObjectID,
-  readonly aliases : string[]
+  readonly aliases : string[],
+  readonly printableName?: string | undefined,
+  readonly description?: string
 }
 
 export type Direction = GameObject & {

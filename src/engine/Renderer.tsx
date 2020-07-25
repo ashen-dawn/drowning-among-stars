@@ -6,19 +6,23 @@ import App from '../components/App/App';
 import Game from "./Game";
 import Parser from "./Parser";
 import GameEvent, { GameEventCommand } from './types/GameEvent'
+import RulesEngine from './RulesEngine';
 
 
 export default class Renderer {
   private parser : Parser
   private game : Game
+  private rules : RulesEngine
   private output : GameEvent[] = []
 
-  constructor(parser : Parser, game : Game) {
+  constructor(parser : Parser, game : Game, rules : RulesEngine) {
     this.parser = parser
     this.game = game
+    this.rules = rules
   }
 
   start() {
+    this.rules.gameStart()
     this.render()
   }
 
