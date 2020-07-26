@@ -23,7 +23,7 @@ export default class RulesEngine extends EventEmitter{
     })
 
     this.on('locationChange', () => {
-      printArea(game.getCurrentRoom(), game.say.bind(game))
+      printArea(game)
     })
   }
 

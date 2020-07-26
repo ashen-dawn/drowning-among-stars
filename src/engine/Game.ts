@@ -27,7 +27,6 @@ export default class Game {
   private onChangeListeners : ChangeListener [] = []
 
   constructor() {
-    console.log('adding directions')
     let state = this.getState()
     state.directions.set('north', {type: ObjectType.Direction, name: 'north', printableName: 'north', aliases: ['n']})
     state.directions.set('east', {type: ObjectType.Direction, name: 'east', printableName: 'east', aliases: ['e']})
@@ -155,6 +154,29 @@ export default class Game {
       return aliasMatch
 
     return null
+  }
+
+  findObjectsInRoom(name : string | undefined) : Item [] {
+    let items : Item [] = []
+    console.log(items)
+
+    for(const item of this.getState().items.values())
+      if(item.location === name)
+        items.push(item)
+
+    console.log(items)
+    return items;
+  }
+
+  findDoorsInRoom(name : string | undefined) : Door [] {
+    const room = this.findObjectByName(name, ObjectType.Room) as Room
+
+    if(!room)
+      return []
+
+    return Array.from(room.neighbors.values())
+      .map(name => this.findObjectByName(name, ObjectType.Door))
+      .filter(door => door !== null) as Door []
   }
 
   isVisible(object : GameObject) : boolean {

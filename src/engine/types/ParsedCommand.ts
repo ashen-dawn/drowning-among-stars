@@ -43,7 +43,7 @@ export enum ParsingErrorSeverity {
   NoSuchObject = 1
 }
 
-export type ValidCommandDetails = {isValid: true, verb: Verb, subject: GameObject | null, object: GameObject | null}
+export type ValidCommandDetails = {isValid: true, parsed: ParsedCommand, verb: Verb, subject: GameObject | null, object: GameObject | null}
 export type InvalidCommandDetails = {isValid: false, command: ParsedCommand, reason: string, severity: ParsingErrorSeverity}
 
 export default class ParsedCommand {
@@ -52,6 +52,10 @@ export default class ParsedCommand {
 
   constructor(verb : Verb) {
     this.verb = verb
+  }
+
+  getTokens() {
+    return [...this.tokens]
   }
 
   getNumTokens() : number {
@@ -99,6 +103,7 @@ export default class ParsedCommand {
 
     return {
       isValid: true,
+      parsed: this,
       verb: this.verb,
       subject,
       object

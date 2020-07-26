@@ -11,6 +11,6 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
     .as('l')
 
   rules.onCommand('look', (command : ValidCommandDetails) => {
-    printArea(game.getCurrentRoom(), game.say.bind(game))
+    printArea(game)
   })
 }

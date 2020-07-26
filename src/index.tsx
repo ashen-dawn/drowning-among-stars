@@ -68,6 +68,14 @@ game.addItem({
   location: 'office'
 })
 
+game.addItem({
+  type: ObjectType.Item,
+  printableName: 'teddy bear',
+  name: 'teddy',
+  aliases: ['teddy bear'],
+  location: 'entry'
+})
+
 game.getState().player.location = 'entry'
 
 game.saveDraft()
