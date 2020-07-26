@@ -3,6 +3,7 @@ import RulesEngine from './RulesEngine'
 import ParsedCommand, { InvalidCommandDetails } from "./types/ParsedCommand";
 import Verb from './types/Verb';
 import VerbBuilder from "./types/VerbBuilder";
+import { game } from ".";
 
 export default class Parser {
   private game : Game
@@ -14,9 +15,24 @@ export default class Parser {
     this.engine = engine
   }
 
-  handleCommand(rawCommand : string) {
+  handlePlayerCommand(rawCommand : string) {
     this.game.outputCommand(rawCommand)
+    try {
+      this.runCommand(rawCommand)
+    } catch (err) {
+      if(typeof err === 'string')
+        game.say(err)
+      else if(err.message)
+        game.say(err.message)
+      else{
+        game.say('An unknown error occured')
+        console.error(err)
+      }
+    }
+    this.game.saveDraft()
+  }
 
+  runCommand(rawCommand : string) {
     // Parse command for syntactical validity
     // (according to known verb templates)
     const grammaticalParsings : ParsedCommand[] = this.parseCommandString(rawCommand)
@@ -30,10 +46,6 @@ export default class Parser {
     } else {
       this.engine.runCommand(validationResult.validCommands[0])
     }
-
-    this.game.saveDraft()
-
-    console.log(validationResult)
   }
 
   parseCommandString(rawCommand: string): ParsedCommand[] {
@@ -51,15 +63,13 @@ export default class Parser {
     console.log(invalidCommands)
 
     if(!invalidCommands.length){
-      this.game.say("I'm unsure what you're trying to do")
-      return
+      throw new Error("I'm unsure what you're trying to do")
     }
 
     const mostValid = invalidCommands[0]
 
     if(mostValid.command.verb.name === 'go'){
-      this.game.say("I'm unsure what you're trying to do")
-      return
+      throw new Error("I'm unsure what you're trying to do")
     }
 
     this.game.say(mostValid.reason)

@@ -29,12 +29,12 @@ export default class Game {
   constructor() {
     console.log('adding directions')
     let state = this.getState()
-    state.directions.set('north', {type: ObjectType.Direction, name: 'north', aliases: ['n']})
-    state.directions.set('east', {type: ObjectType.Direction, name: 'east', aliases: ['e']})
-    state.directions.set('south', {type: ObjectType.Direction, name: 'south', aliases: ['s']})
-    state.directions.set('west', {type: ObjectType.Direction, name: 'west', aliases: ['w']})
-    state.directions.set('up', {type: ObjectType.Direction, name: 'up', aliases: ['u']})
-    state.directions.set('down', {type: ObjectType.Direction, name: 'down', aliases: ['d']})
+    state.directions.set('north', {type: ObjectType.Direction, name: 'north', printableName: 'north', aliases: ['n']})
+    state.directions.set('east', {type: ObjectType.Direction, name: 'east', printableName: 'east', aliases: ['e']})
+    state.directions.set('south', {type: ObjectType.Direction, name: 'south', printableName: 'south', aliases: ['s']})
+    state.directions.set('west', {type: ObjectType.Direction, name: 'west', printableName: 'west', aliases: ['w']})
+    state.directions.set('up', {type: ObjectType.Direction, name: 'up', printableName: 'up', aliases: ['u']})
+    state.directions.set('down', {type: ObjectType.Direction, name: 'down', printableName: 'down', aliases: ['d']})
     this.saveDraft()
   }
 
@@ -122,7 +122,9 @@ export default class Game {
     state.items.set(item.name, item)
   }
 
-  findObjectByName(name : string, type : ObjectType) : GameObject | null {
+  findObjectByName(name : string | undefined | null, type : ObjectType) : GameObject | null {
+    if(!name) return null;
+
     let collection
     switch(type) {
       case ObjectType.Door:
@@ -180,6 +182,7 @@ export default class Game {
 
       case ObjectType.Item:
         return state.player.location === (object as Item).location
+          || (object as Item).location === 'inventory'
 
       default:
         return false

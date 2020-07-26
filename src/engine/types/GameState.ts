@@ -26,7 +26,7 @@ export type GameObject = {
   readonly type : ObjectType,
   readonly name : ObjectID,
   readonly aliases : string[],
-  readonly printableName?: string | undefined,
+  readonly printableName: string | undefined,
   readonly description?: string
 }
 
@@ -41,9 +41,10 @@ export type Room = GameObject & {
 
 export type Door = GameObject & {
   readonly type : ObjectType.Door,
-  readonly neighbors : Map<ObjectID, ObjectID>
+  readonly neighbors : Map<ObjectID, ObjectID>,
   readonly locked : boolean,
-  readonly key : ObjectID
+  readonly key : ObjectID,
+  readonly open: boolean
 }
 
 export type Item = GameObject & {

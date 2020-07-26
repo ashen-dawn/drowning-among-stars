@@ -36,9 +36,7 @@ export default class RulesEngine extends EventEmitter{
   // since that would maybe allow us to _cancel_ actions?
   runCommand(action: ValidCommandDetails) {
     this.emit('beforeCommand', action, this.game)
-  
-    console.log('doing action')
-
+    this.emit('command', action)
     this.emit('afterCommand', action, this.game)
   }
 
@@ -46,4 +44,10 @@ export default class RulesEngine extends EventEmitter{
   onBeforeCommand = (cb : (command : ValidCommandDetails, game : Game) => void) =>  this.on('beforeCommand', cb)
   onAfterCommand = (cb : (command : ValidCommandDetails, game : Game) => void) => this.on('afterCommand', cb)
   onLocationChange = (cb : (game : Game) => void) => this.on('locationChange', cb)
+
+
+  onCommand = (type : string, cb : (command : ValidCommandDetails) => void ) => this.on('command', (command : ValidCommandDetails) => {
+    if(command.verb.name === type)
+      cb(command)
+  })
 }

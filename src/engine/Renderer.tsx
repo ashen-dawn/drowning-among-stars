@@ -14,6 +14,7 @@ export default class Renderer {
   private game : Game
   private rules : RulesEngine
   private output : GameEvent[] = []
+  private target : HTMLElement | null = null
 
   constructor(parser : Parser, game : Game, rules : RulesEngine) {
     this.parser = parser
@@ -21,7 +22,8 @@ export default class Renderer {
     this.rules = rules
   }
 
-  start() {
+  start(target : HTMLElement | null) {
+    this.target = target
     this.rules.gameStart()
     this.render()
   }
@@ -30,15 +32,18 @@ export default class Renderer {
     this.output.push(new GameEventCommand(command))
     this.render()
 
-    this.parser.handleCommand(command)
+    this.parser.handlePlayerCommand(command)
   }
 
   private render() {
+    if(!this.target)
+      throw new Error("Renderer error: target is null")
+
     ReactDOM.render(
       <React.StrictMode>
         <App game={this.game} onCommand={this.handleCommand.bind(this)}/>
       </React.StrictMode>,
-      document.getElementById('root')
+      this.target
     )
   }
 }

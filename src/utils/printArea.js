@@ -1,6 +1,6 @@
 import capitalize from "./capitalize"
 
 export default function printArea(location, say) {
-  say(`**${location.printableName || capitalize(location.name)}**`)
+  say(`**${capitalize(location.printableName)}**`)
   say(location.description)
 }
