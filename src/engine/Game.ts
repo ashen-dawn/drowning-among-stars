@@ -158,13 +158,11 @@ export default class Game {
 
   findObjectsInRoom(name : string | undefined) : Item [] {
     let items : Item [] = []
-    console.log(items)
 
     for(const item of this.getState().items.values())
       if(item.location === name)
         items.push(item)
 
-    console.log(items)
     return items;
   }
 

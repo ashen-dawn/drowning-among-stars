@@ -60,8 +60,6 @@ export default class Parser {
   }
 
   handleError(invalidCommands: InvalidCommandDetails []) {
-    console.log(invalidCommands)
-
     if(!invalidCommands.length){
       throw new Error("I'm unsure what you're trying to do")
     }
@@ -73,7 +71,6 @@ export default class Parser {
     }
 
     this.game.say(mostValid.reason)
-    console.log(mostValid)
   }
 
   understand(name : string) : VerbBuilder {
