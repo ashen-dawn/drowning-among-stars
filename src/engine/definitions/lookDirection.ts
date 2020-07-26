@@ -13,8 +13,9 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
     const current = game.getCurrentRoom()
 
     const lookingAtName = current?.neighbors.get(direction.name)
+
     if(!lookingAtName)
-      game.say(`There is nothing to the ${direction.name}`)
+      throw new Error(`There is nothing to the ${direction.name}`)
     
     let lookingAt = game.findObjectByName(lookingAtName!, ObjectType.Room)
                  || game.findObjectByName(lookingAtName!, ObjectType.Door)

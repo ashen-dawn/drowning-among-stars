@@ -1,7 +1,7 @@
 import Parser from "../Parser";
 import RulesEngine from "../RulesEngine";
 import Game from "../Game";
-import { Direction, ObjectType, Door } from "../types/GameState";
+import { ObjectType, Door } from "../types/GameState";
 import { Draft } from "immer";
 
 export default function(parser : Parser, rules : RulesEngine, game : Game) {
