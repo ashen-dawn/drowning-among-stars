@@ -1,9 +1,12 @@
 import React, {useLayoutEffect, useRef} from 'react'
 import ReactMarkdown from 'react-markdown'
-import styles from './Text.module.css'
+import styles from './Screen.module.css'
+import Menu from '../Menu/Menu'
+import useGameState from '../../hooks/useGameState'
 
-export default function Text({messages, currentInput, currentScroll}) {
+export default function Text({currentInput, currentScroll}) {
   const outputRef = useRef()
+  const {messages} = useGameState()
 
   useLayoutEffect(() => {
     outputRef.current.scrollTop = currentScroll
@@ -11,6 +14,7 @@ export default function Text({messages, currentInput, currentScroll}) {
 
   return (
     <div className={styles.reflectedArea}>
+      <Menu/>
       <div ref={outputRef} className={styles.output}>
         {messages.map((message, i) => {
           if(message.type === 'message')

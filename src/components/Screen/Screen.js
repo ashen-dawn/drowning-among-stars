@@ -1,12 +1,16 @@
 import React, {useState, useEffect, useRef} from 'react'
 import ReactMarkdown from 'react-markdown'
-import styles from './Text.module.css'
-import Reflection from './ReflectedText'
+import styles from './Screen.module.css'
+import Reflection from './Reflected'
+import Menu from '../Menu/Menu'
+import useGameState from '../../hooks/useGameState'
 
-export default function Text({messages, handleCommand}) {
+export default function Text({handleCommand}) {
   const inputRef = useRef()
   const outputRef = useRef()
   const textRef = useRef()
+  const menuRef = useRef()
+  const {messages} = useGameState()
 
   const [currentInput, setCurrentInput] = useState('')
   const [currentScroll, setCurrentScroll] = useState(0)
@@ -32,7 +36,10 @@ export default function Text({messages, handleCommand}) {
   useEffect(() => {
     const playArea = textRef.current
 
-    function onClick() {
+    function onClick(ev) {
+      if(menuRef.current && menuRef.current.contains(ev.target))
+        return;
+
       inputRef.current.focus()
     }
 
@@ -43,6 +50,7 @@ export default function Text({messages, handleCommand}) {
   return (
     <>
       <div ref={textRef} className={styles.playArea}>
+        <Menu containerRef={menuRef}/>
         <div ref={outputRef} onScroll={() => setCurrentScroll(outputRef.current?.scrollTop)} className={styles.output}>
           {messages.map((message, i) => {
             if(message.type === 'message')

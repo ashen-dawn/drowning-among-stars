@@ -1,0 +1,40 @@
+.menuBar {
+  flex-shrink: 0;
+  height: 25px;
+  display: flex;
+  flex-direction: row;
+  padding: 0 16px;
+  padding-top: 16px;
+}
+
+.button {
+  flex: 1;
+  margin-right: 4px;
+  background: none;
+  color: white;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  outline: none;
+  border: solid 1px white;
+  border-radius: 3px;
+  box-shadow: none;
+}
+
+.current {
+  background: white;
+  color: black;
+}
+
+/* These would be nice for usability but aren't duplicated in the reflection */
+/* .button:hover {
+  background: rgba(255,255,255,.2);
+}
+
+.button:active {
+  background: rgba(255,255,255,.4);
+} */
+
+
+.button:last-child {
+  margin-right: 0;
+}
