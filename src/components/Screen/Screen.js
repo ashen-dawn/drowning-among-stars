@@ -57,6 +57,11 @@ export default function Text({promptVisible, handleCommand}) {
     return () => playArea.removeEventListener('click', onClick)
   }, [currentMenu])
 
+  useEffect(() => {
+    if(!currentMenu)
+      inputRef.current.focus()
+  }, [currentMenu])
+
   return (
     <>
       <div ref={textRef} className={styles.playArea}>
@@ -73,7 +78,7 @@ export default function Text({promptVisible, handleCommand}) {
           })}
         </div>
          <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')} onSubmit={onSubmit}>
-          <input tabIndex="0" ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
+          <input autoFocus ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
         </form>
       </div>
       <Reflection promptVisible={promptVisible} messages={messages} currentInput={currentInput} currentScroll={currentScroll}/>
