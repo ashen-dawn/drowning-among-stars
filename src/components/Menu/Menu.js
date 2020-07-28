@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from './Menu.module.css'
 import useSharedState from '../../hooks/useSharedState'
+import Inventory from '../Modals/Inventory'
+import Options from '../Modals/Options'
 
 export default function ({containerRef}) {
   const [currentMenu, setCurrentMenu] = useSharedState('currentMenu')
@@ -27,10 +29,15 @@ export default function ({containerRef}) {
               <button className={styles.modalClose} onClick={() => setCurrentMenu(null)}>x</button>
             </div>
             <div className={styles.modalContent}>
-              <h3>You have:</h3>
-              <ul>
-                <li>Nothing</li>
-              </ul>
+              {(() => {
+                if(currentMenu === 'inventory')
+                  return <Inventory/>
+
+                // if(currentMenu === 'options')
+                //   return <Options/>
+
+                return <p>Not implemented yet, sorry</p>
+              })()}
             </div>
           </div>
         </>

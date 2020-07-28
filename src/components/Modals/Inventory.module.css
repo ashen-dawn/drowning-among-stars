@@ -1,0 +1,9 @@
+.list {
+  list-style: none;
+}
+
+.list li::before {
+  content: '-';
+  margin-left: -20px;
+  margin-right: 10px;
+}
