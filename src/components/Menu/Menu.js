@@ -27,6 +27,10 @@ export default function ({containerRef}) {
               <button className={styles.modalClose} onClick={() => setCurrentMenu(null)}>x</button>
             </div>
             <div className={styles.modalContent}>
+              <h3>You have:</h3>
+              <ul>
+                <li>Nothing</li>
+              </ul>
             </div>
           </div>
         </>

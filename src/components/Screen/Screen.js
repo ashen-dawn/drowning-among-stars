@@ -6,7 +6,7 @@ import Menu from '../Menu/Menu'
 import useGameState from '../../hooks/useGameState'
 import useSharedState from '../../hooks/useSharedState'
 
-export default function Text({promptVisible, handleCommand}) {
+export default function Text({promptVisible, handleCommand, showReflection}) {
   const inputRef = useRef()
   const outputRef = useRef()
   const textRef = useRef()
@@ -81,7 +81,7 @@ export default function Text({promptVisible, handleCommand}) {
           <input autoFocus ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
         </form>
       </div>
-      <Reflection promptVisible={promptVisible} messages={messages} currentInput={currentInput} currentScroll={currentScroll}/>
+      {showReflection && <Reflection promptVisible={promptVisible} messages={messages} currentInput={currentInput} currentScroll={currentScroll}/>}
     </>
   )
 }

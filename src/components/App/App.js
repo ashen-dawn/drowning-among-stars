@@ -14,6 +14,11 @@ function App({promptVisible, onCommand, game}) {
   const scaleY = height / 400
   const scale = 0 || Math.min(scaleX, scaleY)
 
+  const fuzzing = true
+  const flickering = true
+  const scanLines = true
+  const imageBackground = true
+
   useEffect(() => {
     game.onChange(setState)
     game.getState()
@@ -22,11 +27,12 @@ function App({promptVisible, onCommand, game}) {
 
   return (
     <Provider value={state}>
-      <div style={{transform: `scale(${scale})`, overflow: 'hidden'}} className={styles.screen}>
-        <Screen promptVisible={promptVisible} handleCommand={onCommand}/>
-        <div className={styles.overlay}>
+      <div style={{transform: `scale(${scale})`, overflow: 'hidden'}} className={styles.screen + `${flickering && ' flickering' || ''}${fuzzing && ' fuzzing' || ''}`}>
+        <Screen promptVisible={promptVisible} handleCommand={onCommand} showReflection={imageBackground}/>
+        {imageBackground && <div className={styles.overlay}>
           <img alt="" src={backgroundURL}/>
-        </div>
+        </div>}
+        {scanLines && <div className="scan"></div>}
       </div>
     </Provider>
   );
