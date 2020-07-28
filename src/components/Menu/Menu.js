@@ -19,6 +19,18 @@ export default function ({containerRef}) {
       <MenuButton name="inventory" current={currentMenu} handleButton={handleButton}/>
       <MenuButton name="help" current={currentMenu} handleButton={handleButton}/>
       <MenuButton name="options" current={currentMenu} handleButton={handleButton}/>
+      {currentMenu && (
+        <>
+          <div className={styles.modal}>
+            <div className={styles.modalTitle}>
+              {currentMenu}
+              <button className={styles.modalClose} onClick={() => setCurrentMenu(null)}>x</button>
+            </div>
+            <div className={styles.modalContent}>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

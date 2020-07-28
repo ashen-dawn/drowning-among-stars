@@ -4,6 +4,7 @@ import styles from './Screen.module.css'
 import Reflection from './Reflected'
 import Menu from '../Menu/Menu'
 import useGameState from '../../hooks/useGameState'
+import useSharedState from '../../hooks/useSharedState'
 
 export default function Text({handleCommand}) {
   const inputRef = useRef()
@@ -11,6 +12,7 @@ export default function Text({handleCommand}) {
   const textRef = useRef()
   const menuRef = useRef()
   const {messages} = useGameState()
+  const [currentMenu] = useSharedState('currentMenu')
 
   const [currentInput, setCurrentInput] = useState('')
   const [currentScroll, setCurrentScroll] = useState(0)
@@ -37,7 +39,12 @@ export default function Text({handleCommand}) {
     const playArea = textRef.current
 
     function onClick(ev) {
+      // Don't focus if click was in menu area
       if(menuRef.current && menuRef.current.contains(ev.target))
+        return;
+
+      // If we have a menu open, don't focus
+      if(currentMenu)
         return;
 
       inputRef.current.focus()
@@ -45,7 +52,7 @@ export default function Text({handleCommand}) {
 
     playArea.addEventListener('click', onClick)
     return () => playArea.removeEventListener('click', onClick)
-  }, [])
+  }, [currentMenu])
 
   return (
     <>
@@ -62,7 +69,7 @@ export default function Text({handleCommand}) {
             return null
           })}
         </div>
-        <form className={styles.input} onSubmit={onSubmit}>
+        <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input} onSubmit={onSubmit}>
           <input ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
         </form>
       </div>

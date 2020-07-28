@@ -9,15 +9,19 @@
 
 .button {
   flex: 1;
-  margin-right: 4px;
+  margin-left: 4px;
   background: none;
   color: white;
   font-family: 'VT323', monospace;
   font-size: 20px;
   outline: none;
   border: solid 1px white;
-  border-radius: 3px;
   box-shadow: none;
+  cursor: pointer;
+}
+
+.button:first-child {
+  margin-left: 0;
 }
 
 .current {
@@ -34,7 +38,52 @@
   background: rgba(255,255,255,.4);
 } */
 
+.modal {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  right: 50px;
+  bottom: 50px;
+  background: black;
+  border: solid 12px black;
+  padding: 4px;
+}
 
-.button:last-child {
-  margin-right: 0;
+.modal::before {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: solid 4px white;
+}
+
+.modalTitle {
+  background: white;
+  color: black;
+  margin: -1px -2px;
+  padding: 2px;
+  padding-bottom: 4px;
+}
+
+.modalClose {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  background: black;
+  border: 0;
+  color: white;
+  padding: 1px 8px 4px 6px;
+  cursor: pointer;
+}
+
+.modalContent {
+  padding: 8px;
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+.modalContent p:first-child {
+  margin-top: 0;
 }

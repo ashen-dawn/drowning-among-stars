@@ -20,8 +20,6 @@ function App({onCommand, game}) {
     game.saveDraft()
   }, [game])
 
-  console.log(state)
-
   return (
     <Provider value={state}>
       <div style={{transform: `scale(${scale})`, overflow: 'hidden'}} className={styles.screen}>
