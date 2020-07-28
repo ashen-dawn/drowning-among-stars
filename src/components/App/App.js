@@ -6,7 +6,7 @@ import {Provider} from '../../hooks/useGameState'
 
 import backgroundURL from './background.png'
 
-function App({onCommand, game}) {
+function App({promptVisible, onCommand, game}) {
   const [state, setState] = useState({messages: []})
 
   const {width, height} = useWindowSize()
@@ -23,7 +23,7 @@ function App({onCommand, game}) {
   return (
     <Provider value={state}>
       <div style={{transform: `scale(${scale})`, overflow: 'hidden'}} className={styles.screen}>
-        <Screen handleCommand={onCommand}/>
+        <Screen promptVisible={promptVisible} handleCommand={onCommand}/>
         <div className={styles.overlay}>
           <img alt="" src={backgroundURL}/>
         </div>

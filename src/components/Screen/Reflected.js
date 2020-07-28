@@ -4,7 +4,7 @@ import styles from './Screen.module.css'
 import Menu from '../Menu/Menu'
 import useGameState from '../../hooks/useGameState'
 
-export default function Text({currentInput, currentScroll}) {
+export default function Text({promptVisible, currentInput, currentScroll}) {
   const outputRef = useRef()
   const {messages} = useGameState()
 
@@ -26,7 +26,7 @@ export default function Text({currentInput, currentScroll}) {
           return null
         })}
       </div>
-      <div className={styles.input}>
+      <div className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')}>
         <input tabIndex="-1" value={currentInput}/>
       </div>
     </div>

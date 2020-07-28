@@ -6,7 +6,7 @@ import Menu from '../Menu/Menu'
 import useGameState from '../../hooks/useGameState'
 import useSharedState from '../../hooks/useSharedState'
 
-export default function Text({handleCommand}) {
+export default function Text({promptVisible, handleCommand}) {
   const inputRef = useRef()
   const outputRef = useRef()
   const textRef = useRef()
@@ -17,14 +17,17 @@ export default function Text({handleCommand}) {
   const [currentInput, setCurrentInput] = useState('')
   const [currentScroll, setCurrentScroll] = useState(0)
 
-  function onSubmit(ev) {
+  async function onSubmit(ev) {
     if(ev) ev.preventDefault()
+
+    if(!promptVisible)
+      return;
 
     if(!inputRef.current?.value.trim())
       return;
 
     if(inputRef.current){
-      handleCommand(inputRef.current.value)
+      await handleCommand(inputRef.current.value)
       inputRef.current.value = ''
       setCurrentInput('')
     }
@@ -69,11 +72,11 @@ export default function Text({handleCommand}) {
             return null
           })}
         </div>
-        <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input} onSubmit={onSubmit}>
-          <input ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
+         <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')} onSubmit={onSubmit}>
+          <input tabIndex="0" ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
         </form>
       </div>
-      <Reflection messages={messages} currentInput={currentInput} currentScroll={currentScroll}/>
+      <Reflection promptVisible={promptVisible} messages={messages} currentInput={currentInput} currentScroll={currentScroll}/>
     </>
   )
 }

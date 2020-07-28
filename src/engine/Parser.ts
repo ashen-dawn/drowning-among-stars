@@ -4,6 +4,8 @@ import ParsedCommand, { InvalidCommandDetails } from "./types/ParsedCommand";
 import Verb from './types/Verb';
 import VerbBuilder from "./types/VerbBuilder";
 import { game } from ".";
+import delay from "../utils/delay";
+import Renderer from "./Renderer";
 
 export default class Parser {
   private game : Game
@@ -15,11 +17,18 @@ export default class Parser {
     this.engine = engine
   }
 
-  handlePlayerCommand(rawCommand : string) {
+  async handlePlayerCommand(rawCommand : string, renderer : Renderer) {
     this.game.outputCommand(rawCommand)
+    this.game.saveDraft()
+
+    const timer = delay(200)
+
     try {
-      this.runCommand(rawCommand)
+      renderer.hidePrompt()
+      await this.runCommand(rawCommand)
+      await timer
     } catch (err) {
+      await timer
       if(typeof err === 'string')
         game.say(err)
       else if(err.message)
@@ -28,6 +37,8 @@ export default class Parser {
         game.say('An unknown error occured')
         console.error(err)
       }
+    } finally {
+      renderer.showPrompt()
     }
     this.game.saveDraft()
   }

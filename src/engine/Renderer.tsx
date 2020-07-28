@@ -15,6 +15,7 @@ export default class Renderer {
   private rules : RulesEngine
   private output : GameEvent[] = []
   private target : HTMLElement | null = null
+  private promptVisible : boolean = true
 
   constructor(parser : Parser, game : Game, rules : RulesEngine) {
     this.parser = parser
@@ -28,11 +29,20 @@ export default class Renderer {
     this.render()
   }
 
-  private handleCommand(command : string) {
-    this.output.push(new GameEventCommand(command))
+  public hidePrompt() {
+    this.promptVisible = false;
     this.render()
+  }
 
-    this.parser.handlePlayerCommand(command)
+  public showPrompt() {
+    this.promptVisible = true;
+    this.render()
+  }
+
+  private async handleCommand(command : string) {
+    this.output.push(new GameEventCommand(command))
+    await this.parser.handlePlayerCommand(command, this)
+    this.render()
   }
 
   private render() {
@@ -41,7 +51,7 @@ export default class Renderer {
 
     ReactDOM.render(
       <React.StrictMode>
-        <App game={this.game} onCommand={this.handleCommand.bind(this)}/>
+        <App promptVisible={this.promptVisible} game={this.game} onCommand={this.handleCommand.bind(this)}/>
       </React.StrictMode>,
       this.target
     )
