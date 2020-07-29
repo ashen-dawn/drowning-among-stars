@@ -10,7 +10,7 @@ const updateSharedState = (key, state) => {
 }
 
 export default function useSharedState(key, initial) {
-  const [localState, setLocalState] = useState(initial)
+  const [localState, setLocalState] = useState(sharedState[key] || initial)
 
   useEffect(() => {
     const updateLocal = () => setLocalState(sharedState[key])

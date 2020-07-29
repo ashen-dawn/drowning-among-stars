@@ -35,3 +35,33 @@
   position: relative;
   top: 2px;
 }
+
+.saveFile:not(:first-child) {
+  margin-top: 20px;
+}
+
+.saveFile {
+  display: flex;
+  flex-direction: row;
+}
+
+.saveInfo {
+  flex: 1;
+}
+
+.saveFile p {
+  margin: 0;
+}
+
+.saveButton {
+  background: transparent;
+  color: white;
+  border: solid 1px white;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.saveButton:disabled {
+  opacity: 0;
+  pointer-events: none;
+}

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useEffect} from 'react'
 import useSharedState from './useSharedState'
 
 export default function useLocalStorage(key, initialValue) {
@@ -19,7 +19,7 @@ export default function useLocalStorage(key, initialValue) {
     } catch (error) {
       console.log(error);
     }
-  }, [storedValue])
+  }, [storedValue, key])
 
   return [storedValue, setStoredValue];
 }

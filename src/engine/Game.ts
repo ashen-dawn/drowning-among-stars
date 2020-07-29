@@ -37,6 +37,15 @@ export default class Game {
     this.saveDraft()
   }
 
+  loadGame(newState : GameState) {
+    this.gameState = newState
+
+    // Just to confirm there's no drafts lying around, and to notify everything
+    // of the change
+    this.beginDraft()
+    this.saveDraft()
+  }
+
   outputCommand(commandString: string) {
     const state = this.getState()
     state.messages.push(new GameEventCommand(commandString))

@@ -27,7 +27,7 @@ export default function Text({promptVisible, currentInput, currentScroll}) {
         })}
       </div>
       <div className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')}>
-        <input tabIndex="-1" value={currentInput}/>
+        <input readOnly tabIndex="-1" value={currentInput}/>
       </div>
     </div>
   )
