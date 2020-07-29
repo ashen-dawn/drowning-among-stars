@@ -73,6 +73,10 @@
   font-weight: bold;
 }
 
+.output.noMouse {
+  pointer-events: none;
+}
+
 /**
  * Shadow
  */

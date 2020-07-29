@@ -1,0 +1,22 @@
+.options {
+  max-width: 800px;
+  width: calc(100vw - 200px);
+}
+
+.options button {
+  background: transparent;
+  border: solid 1px white;
+  margin: 5px 15px;
+  color: white;
+  padding: 5px 10px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.options {
+  color: rgba(255,255,255,.7);
+}
+
+.options strong {
+  color: white;
+}

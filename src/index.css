@@ -6,10 +6,11 @@ html, body {
 
 #root {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background: black;
+  background: #171717;
   /* font-family: 'VT323', monospace; */
   font-family: 'Share Tech Mono', monospace;
   overflow: hidden;

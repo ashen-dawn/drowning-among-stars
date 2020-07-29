@@ -9,8 +9,8 @@ const updateSharedState = (key, state) => {
   stateChanged.emit(key)
 }
 
-export default function useSharedState(key) {
-  const [localState, setLocalState] = useState()
+export default function useSharedState(key, initial) {
+  const [localState, setLocalState] = useState(initial)
 
   useEffect(() => {
     const updateLocal = () => setLocalState(sharedState[key])

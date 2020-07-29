@@ -3,6 +3,7 @@ import useWindowSize from '../../hooks/useWindowSize'
 import styles from './App.module.css';
 import Screen from '../Screen/Screen';
 import {Provider} from '../../hooks/useGameState'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 import backgroundURL from './background.png'
 
@@ -14,10 +15,10 @@ function App({promptVisible, onCommand, game}) {
   const scaleY = height / 400
   const scale = 0 || Math.min(scaleX, scaleY)
 
-  const fuzzing = true
-  const flickering = true
-  const scanLines = true
-  const imageBackground = true
+  const [effects] = useLocalStorage('video')
+
+  console.log(effects)
+  const {fuzzing, flickering, scanLines, imageBackground} = effects
 
   useEffect(() => {
     game.onChange(setState)

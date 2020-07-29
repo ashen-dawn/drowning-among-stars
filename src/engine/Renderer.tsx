@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import '../index.css';
 import App from '../components/App/App';
+import Setup from '../components/Setup/Setup';
 
 import Game from "./Game";
 import Parser from "./Parser";
@@ -16,6 +17,7 @@ export default class Renderer {
   private output : GameEvent[] = []
   private target : HTMLElement | null = null
   private promptVisible : boolean = true
+  private videoSettingsSet : boolean = !!window.localStorage.getItem('video')
 
   constructor(parser : Parser, game : Game, rules : RulesEngine) {
     this.parser = parser
@@ -49,11 +51,20 @@ export default class Renderer {
     if(!this.target)
       throw new Error("Renderer error: target is null")
 
-    ReactDOM.render(
-      <React.StrictMode>
-        <App promptVisible={this.promptVisible} game={this.game} onCommand={this.handleCommand.bind(this)}/>
-      </React.StrictMode>,
-      this.target
-    )
+    if(!this.videoSettingsSet) {
+      ReactDOM.render(
+        <React.StrictMode>
+          <Setup/>
+        </React.StrictMode>,
+        this.target
+      )
+    } else {
+      ReactDOM.render(
+        <React.StrictMode>
+          <App promptVisible={this.promptVisible} game={this.game} onCommand={this.handleCommand.bind(this)}/>
+        </React.StrictMode>,
+        this.target
+      )
+    }
   }
 }

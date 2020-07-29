@@ -66,7 +66,7 @@ export default function Text({promptVisible, handleCommand, showReflection}) {
     <>
       <div ref={textRef} className={styles.playArea}>
         <Menu containerRef={menuRef}/>
-        <div ref={outputRef} onScroll={() => setCurrentScroll(outputRef.current?.scrollTop)} className={styles.output}>
+        <div ref={outputRef} onScroll={() => setCurrentScroll(outputRef.current?.scrollTop)} className={styles.output + (currentMenu !== null ? ' ' + styles.noMouse : '')}>
           {messages.map((message, i) => {
             if(message.type === 'message')
               return <ReactMarkdown key={i}>{message.message}</ReactMarkdown>

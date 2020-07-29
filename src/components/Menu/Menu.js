@@ -33,8 +33,8 @@ export default function ({containerRef}) {
                 if(currentMenu === 'inventory')
                   return <Inventory/>
 
-                // if(currentMenu === 'options')
-                //   return <Options/>
+                if(currentMenu === 'options')
+                  return <Options/>
 
                 return <p>Not implemented yet, sorry</p>
               })()}
