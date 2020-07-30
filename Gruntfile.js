@@ -25,10 +25,22 @@ module.exports = function(grunt) {
         }]
       }
     },
+    run: {
+      publish: {
+        cmd: 'butler',
+        args: [
+          'push',
+          'DrowningAmongStars_<%= pkg.version %>.zip',
+          'tempest-dawn/drowning-among-stars:web'
+        ]
+      }
+    }
   })
 
   grunt.loadNpmTasks('grunt-sed')
   grunt.loadNpmTasks('grunt-contrib-compress')
+  grunt.loadNpmTasks('grunt-run')
 
-  grunt.registerTask('default', ['sed', 'compress'])
+  grunt.registerTask('build', ['sed', 'compress'])
+  grunt.registerTask('publish', ['run:publish'])
 }
