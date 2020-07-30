@@ -1,6 +1,7 @@
 .options {
   max-width: 800px;
-  width: calc(100vw - 200px);
+  width: calc(100vw - 40px);
+  font-size: 12px;
 }
 
 .options button {
