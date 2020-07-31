@@ -3,6 +3,7 @@ import styles from './Menu.module.css'
 import useSharedState from '../../hooks/useSharedState'
 import Inventory from '../Modals/Inventory'
 import Options from '../Modals/Options'
+import Map from '../Modals/Map'
 
 export default function ({containerRef}) {
   const [currentMenu, setCurrentMenu] = useSharedState('currentMenu')
@@ -32,6 +33,9 @@ export default function ({containerRef}) {
               {(() => {
                 if(currentMenu === 'inventory')
                   return <Inventory/>
+
+                if(currentMenu === 'map')
+                  return <Map />
 
                 if(currentMenu === 'options')
                   return <Options/>

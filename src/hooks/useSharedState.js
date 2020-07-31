@@ -10,6 +10,8 @@ const updateSharedState = (key, state) => {
 }
 
 export default function useSharedState(key, initial) {
+  if(!key) throw new Error('Cannot call useSharedState without a key')
+
   const [localState, setLocalState] = useState(sharedState[key] || initial)
 
   useEffect(() => {

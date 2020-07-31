@@ -76,7 +76,20 @@ game.addItem({
   location: 'entry'
 })
 
-game.getState().player.location = 'entry'
+game.addRoom({
+  type: ObjectType.Room,
+  printableName: 'Crew Cabin',
+  name: 'cabin',
+  aliases: [],
+  neighbors: new Map(),
+  description: `
+A dark and dingy room with a single bunk bed along the starboard side.
+
+The washroom is to the aft, with the common room to port.
+  `
+})
+
+game.getState().player.location = 'cabin'
 
 game.saveDraft()
 

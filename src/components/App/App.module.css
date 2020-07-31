@@ -5,6 +5,9 @@
   width: 600px;
   height: 400px;
   background: black;
+}
+
+.screen, .screen img {
   image-rendering: pixelated;
 }
 

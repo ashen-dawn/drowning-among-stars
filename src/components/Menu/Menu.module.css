@@ -84,7 +84,7 @@
   margin-top: 1px;
   padding: 8px;
   height: calc(100% - 40px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .modalContent :first-child {
