@@ -1,95 +1,14 @@
-import {game, renderer} from './engine/'
-import { ObjectType, Room, Door } from './engine/types/GameState'
+import {game, rules, renderer} from './engine/'
 
-const entry : Room = {
-  type: ObjectType.Room,
-  name: 'entry',
-  printableName: 'entry',
-  aliases: [],
-  neighbors: new Map(),
-  description: 'A tight corridor with yellow faded walls.'
-}
+import './rooms.tsx'
 
-const closet : Room = {
-  type: ObjectType.Room,
-  name: 'closet',
-  printableName: 'closet',
-  aliases: [],
-  neighbors: new Map(),
-  description: 'A small closet'
-}
-
-const door : Door = {
-  type: ObjectType.Door,
-  name: 'door',
-  printableName: 'white door',
-  aliases: ['white door'],
-  neighbors: new Map(),
-  locked: true,
-  key: 'brass key',
-  description: 'A large white door with but a single keybole.',
-  open: false
-}
-
-const office : Room = {
-  type: ObjectType.Room,
-  name: 'office',
-  printableName: 'office',
-  aliases: [],
-  neighbors: new Map(),
-  description: 'An opulent office'
-}
-
-entry.neighbors.set('east', 'door')
-office.neighbors.set('west', 'door')
-door.neighbors.set('east', 'office')
-door.neighbors.set('west', 'entry')
-entry.neighbors.set('west', 'closet')
-closet.neighbors.set('east', 'entry')
-
-game.addRoom(entry)
-game.addRoom(office)
-game.addRoom(closet)
-game.addDoor(door)
-
-game.addItem({
-  type: ObjectType.Item,
-  printableName: 'brass key',
-  name: 'brass key',
-  aliases: ['key'],
-  location: 'entry'
-})
-
-game.addItem({
-  type: ObjectType.Item,
-  printableName: 'gem',
-  name: 'ruby',
-  aliases: ['gem'],
-  location: 'office'
-})
-
-game.addItem({
-  type: ObjectType.Item,
-  printableName: 'teddy bear',
-  name: 'teddy',
-  aliases: ['teddy bear'],
-  location: 'entry'
-})
-
-game.addRoom({
-  type: ObjectType.Room,
-  printableName: 'Crew Cabin',
-  name: 'cabin',
-  aliases: [],
-  neighbors: new Map(),
-  description: `
-A dark and dingy room with a single bunk bed along the starboard side.
-
-The washroom is to the aft, with the common room to port.
-  `
-})
 
 game.getState().player.location = 'cabin'
+game.getCurrentRoom()!.visited = true
+
+rules.onAfterCommand((command, game) => {
+  game.getCurrentRoom()!.visited = true
+})
 
 game.saveDraft()
 

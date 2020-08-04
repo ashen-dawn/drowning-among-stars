@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import ReactMarkdown from 'react-markdown'
 import useGameState from '../../hooks/useGameState'
 
@@ -15,6 +15,11 @@ export default function Map() {
 
   const [currentFloor, setFloor] = useSharedState('mapFloor', isOnLower ? 'lower' : 'upper')
   const [roomName, setRoom] = useSharedState('mapRoom')
+
+  // On first render, update room
+  useEffect(() => {
+    setRoom(playerLocation)
+  }, []) // eslint-disable-line
 
   const currentRoom = (roomName && gameState.rooms.get(roomName)) || null
 
@@ -47,7 +52,9 @@ export default function Map() {
         {currentRoom ? (
           <>
             <h3>{currentRoom.printableName}</h3>
-            <ReactMarkdown>{currentRoom.description}</ReactMarkdown>
+            {currentRoom.visited
+              ? <ReactMarkdown>{currentRoom.description}</ReactMarkdown>
+              : <p>Visit this room to unlock its description</p>}
           </>
         ) : (
           <h3 style={{marginTop: '45%', textAlign: 'center'}}>Select a Room</h3>

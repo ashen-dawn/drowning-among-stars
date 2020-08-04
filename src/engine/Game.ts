@@ -1,5 +1,5 @@
 import {enableMapSet, createDraft, finishDraft, Draft} from 'immer'
-import GameState, { GameObject, Room, Door, Item, ObjectType } from './types/GameState'
+import GameState, { GameObject, Room, Door, Item, ObjectType, ObjectID, Direction } from './types/GameState'
 import ParsedCommand, { ValidCommandDetails, InvalidCommandDetails } from './types/ParsedCommand'
 import { GameEventMessage, GameEventCommand } from './types/GameEvent'
 
@@ -20,7 +20,8 @@ export default class Game {
     doors: new Map(),
     items: new Map(),
     player: {location: ''},
-    messages: []
+    messages: [],
+    properties: new Map()
   }
 
   private draft : Draft<GameState> | null = null
@@ -28,12 +29,12 @@ export default class Game {
 
   constructor() {
     let state = this.getState()
-    state.directions.set('north', {type: ObjectType.Direction, name: 'north', printableName: 'north', aliases: ['n']})
-    state.directions.set('east', {type: ObjectType.Direction, name: 'east', printableName: 'east', aliases: ['e']})
-    state.directions.set('south', {type: ObjectType.Direction, name: 'south', printableName: 'south', aliases: ['s']})
-    state.directions.set('west', {type: ObjectType.Direction, name: 'west', printableName: 'west', aliases: ['w']})
-    state.directions.set('up', {type: ObjectType.Direction, name: 'up', printableName: 'up', aliases: ['u']})
-    state.directions.set('down', {type: ObjectType.Direction, name: 'down', printableName: 'down', aliases: ['d']})
+    state.directions.set('fore', {type: ObjectType.Direction, name: 'fore', printableName: 'fore', aliases: ['north', 'f', 'n'], opposite: 'aft'})
+    state.directions.set('starboard', {type: ObjectType.Direction, name: 'starboard', printableName: 'starboard', aliases: ['starboard', 'sb', 'e'], opposite: 'port'})
+    state.directions.set('aft', {type: ObjectType.Direction, name: 'aft', printableName: 'aft', aliases: ['aft', 'a', 's'], opposite: 'fore'})
+    state.directions.set('port', {type: ObjectType.Direction, name: 'port', printableName: 'port', aliases: ['port', 'p', 'w'], opposite: 'starboard'})
+    state.directions.set('up', {type: ObjectType.Direction, name: 'up', printableName: 'up', aliases: ['u'], opposite: 'down'})
+    state.directions.set('down', {type: ObjectType.Direction, name: 'down', printableName: 'down', aliases: ['d'], opposite: 'up'})
     this.saveDraft()
   }
 
@@ -115,19 +116,96 @@ export default class Game {
     .find(room => room.name === state.player.location) || null
   }
 
-  addRoom(room : Room) {
+  createProperty(key : string, value : any) {
+    let state = this.getState()
+
+    if(state.properties.has(key))
+      throw new Error(`Game prop ${key} has already been defined`)
+
+    state.properties.set(key, value)
+  }
+
+  setProperty(key : string, value : any) {
+    let state = this.getState()
+
+    if(!state.properties.has(key))
+      throw new Error(`Game prop ${key} has not been defined`)
+
+    state.properties.set(key, value)
+  }
+
+  getProperty(key : string) : any {
+    let state = this.getState()
+
+    if(!state.properties.has(key))
+      throw new Error(`Game prop ${key} has not been defined`)
+
+    return state.properties.get(key)
+  }
+
+  addRoom(name : string, printableName : string | null, description : string) : Draft<Room> {
+    let room : Room = {
+      type: ObjectType.Room,
+      name, aliases: [], printableName: printableName || name, description,
+      neighbors: new Map(),
+      visited: false
+    }
+
     let state = this.getState()
     state.rooms.set(room.name, room)
+    return room
   }
 
-  addDoor(door: Door) {
+  addDoor(name : string, description : string) : Draft<Door> {
+    let door : Door = {
+      type: ObjectType.Door,
+      name, aliases: [], printableName: name, description,
+      neighbors: new Map(),
+      locked: false,
+      key: null,
+      open: false
+    }
+
     let state = this.getState()
     state.doors.set(door.name, door)
+
+    return door
   }
 
-  addItem(item: Item) {
+  addItem(name : string, description : string, location : string) : Draft<Item> {
+    let item : Item = {
+      type: ObjectType.Item,
+      name, aliases: [], printableName: name, description,
+      location
+    }
+
     let state = this.getState()
     state.items.set(item.name, item)
+
+    return item
+  }
+
+  /**
+   * Sets up a neighbor relationship such that Room B is [direction] of Room A,
+   * and Room A is [opposite] of Room B
+   *
+   * @param roomA
+   * @param direction
+   * @param roomB
+   */
+  setNeighbor(roomA : ObjectID, direction: ObjectID, roomB : ObjectID) {
+    let a = (this.findObjectByName(roomA, ObjectType.Room) || this.findObjectByName(roomA, ObjectType.Door)) as Room
+    let b = (this.findObjectByName(roomB, ObjectType.Room) || this.findObjectByName(roomB, ObjectType.Door)) as Room
+    let dir = this.findObjectByName(direction, ObjectType.Direction) as Direction
+
+    if(!a) throw new Error(`No such room or door ${roomA}`)
+    if(!b) throw new Error(`No such room or door ${roomB}`)
+    if(!dir) throw new Error(`No such direction ${direction}`)
+
+    const opposite = dir.opposite!
+
+    a.neighbors.set(direction, b.name)
+    b.neighbors.set(opposite, a.name)
   }
 
   findObjectByName(name : string | undefined | null, type : ObjectType) : GameObject | null {
