@@ -1,4 +1,4 @@
-import { ObjectType, GameObject } from "./GameState"
+import { ObjectType, GameObject, Item } from "./GameState"
 import NounPosition from "./NounPosition"
 import Verb from "./Verb"
 import Game from "../Game"
@@ -76,7 +76,7 @@ export default class ParsedCommand {
 
     for(const noun of nouns) {
       let gameObject = game.findObjectByName(noun.name, noun.itemType)
-      if(!gameObject)
+      if(!gameObject || (gameObject.type === ObjectType.Item && !((gameObject as Item).seen)))
         return {
           isValid: false,
           command: this,
@@ -91,7 +91,11 @@ export default class ParsedCommand {
         return {
           isValid: false,
           command: this,
-          reason: `You cannot see the ${noun.name}`,
+          reason: `You cannot see the ${noun.name}${(() => {
+            if(gameObject.type === ObjectType.Item && (gameObject as Item).lastKnownLocation)
+              return ` (last seen in the ${(gameObject as Item).lastKnownLocation})`
+            return ''
+          })()}`,
           severity: ParsingErrorSeverity.NotVisible
         }
 

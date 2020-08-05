@@ -52,5 +52,7 @@ export type Door = GameObject & {
 
 export type Item = GameObject & {
   readonly type : ObjectType.Item,
-  readonly location: ObjectID | 'inventory'
+  readonly location: ObjectID | 'inventory',
+  readonly seen : boolean,
+  readonly lastKnownLocation? : string
 }

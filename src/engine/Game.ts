@@ -176,7 +176,8 @@ export default class Game {
     let item : Item = {
       type: ObjectType.Item,
       name, aliases: [], printableName: name, description,
-      location
+      location,
+      seen: false
     }
 
     let state = this.getState()
@@ -211,6 +212,8 @@ export default class Game {
   findObjectByName(name : string | undefined | null, type : ObjectType) : GameObject | null {
     if(!name) return null;
 
+    let lowerCaseName = name.toLocaleLowerCase()
+
     let collection
     switch(type) {
       case ObjectType.Door:
@@ -232,18 +235,18 @@ export default class Game {
 
     const objects = [...collection!.values()]
 
-    const exactMatch = objects.find((object) => name === object.name)
+    const exactMatch = objects.find((object) => lowerCaseName === object.name.toLocaleLowerCase())
     if(exactMatch)
       return exactMatch
 
-    const aliasMatch = objects.find(({aliases}) => aliases.includes(name))
+    const aliasMatch = objects.find(({aliases}) => aliases.map(a => a.toLocaleLowerCase()).includes(lowerCaseName))
     if(aliasMatch)
       return aliasMatch
 
     return null
   }
 
-  findObjectsInRoom(name : string | undefined) : Item [] {
+  findObjectsInRoom(name : string | undefined) : Draft<Item> [] {
     let items : Item [] = []
 
     for(const item of this.getState().items.values())
