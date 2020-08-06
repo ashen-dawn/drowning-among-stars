@@ -18,6 +18,7 @@
   opacity: .2;
   filter: blur(2px);
   overflow: hidden;
+  z-index: 2;
 }
 
 .output {
@@ -75,4 +76,9 @@
 
 .output.noMouse {
   pointer-events: none;
+}
+
+.pausePrompt {
+  text-align: center;
+  opacity: .6;
 }

@@ -2,11 +2,9 @@ import React, {useLayoutEffect, useRef} from 'react'
 import ReactMarkdown from 'react-markdown'
 import styles from './Screen.module.css'
 import Menu from '../Menu/Menu'
-import useGameState from '../../hooks/useGameState'
 
-export default function Text({promptVisible, currentInput, currentScroll}) {
+export default function Text({promptVisible, messages, currentInput, currentScroll, outputPaused}) {
   const outputRef = useRef()
-  const {messages} = useGameState()
 
   useLayoutEffect(() => {
     outputRef.current.scrollTop = currentScroll
@@ -25,6 +23,11 @@ export default function Text({promptVisible, currentInput, currentScroll}) {
 
           return null
         })}
+        {outputPaused && (
+          <p className={styles.pausePrompt}>
+            (Press [RETURN] to continue)
+          </p>
+        )}
       </div>
       <div className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')}>
         <input readOnly tabIndex="-1" value={currentInput}/>

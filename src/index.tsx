@@ -24,6 +24,14 @@ game.addItem('Block', 'A boring wooden block', 'commons')
 
 game.saveDraft()
 
+// Print description on game start
+rules.onGameStart(() => {
+  game.say(`Come, join the navy they said.`)
+  game.pause()
+  game.say(`It'll be fun they said.`)
+  game.pause()
+})
+
 
 
 renderer.start(document.getElementById('root'))

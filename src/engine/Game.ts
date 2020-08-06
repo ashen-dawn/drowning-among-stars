@@ -1,7 +1,7 @@
 import {enableMapSet, createDraft, finishDraft, Draft} from 'immer'
 import GameState, { GameObject, Room, Door, Item, ObjectType, ObjectID, Direction } from './types/GameState'
 import ParsedCommand, { ValidCommandDetails, InvalidCommandDetails } from './types/ParsedCommand'
-import { GameEventMessage, GameEventCommand } from './types/GameEvent'
+import { GameEventMessage, GameEventCommand, GameEventPause } from './types/GameEvent'
 
 enableMapSet()
 
@@ -55,6 +55,10 @@ export default class Game {
   say(message: string) {
     const state = this.getState()
     state.messages.push(new GameEventMessage(message))
+  }
+
+  pause() {
+    this.getState().messages.push(new GameEventPause())
   }
 
   filterValidCommands(commands: ParsedCommand[]) : CommandValidateResult {

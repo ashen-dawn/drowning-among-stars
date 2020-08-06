@@ -24,7 +24,7 @@ export default function ({containerRef}) {
 
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [])
+  }, [setCurrentMenu])
 
   return (
     <div ref={containerRef} className={styles.menuBar}>

@@ -201,6 +201,7 @@ html.noeffects {
   right: 0;
   overflow: hidden;
   pointer-events: none;
+  z-index:3;
 }
 
 .scan:before{

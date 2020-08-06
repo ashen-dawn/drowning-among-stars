@@ -47,6 +47,7 @@
   background: black;
   border: solid 12px black;
   padding: 4px;
+  z-index: 1;
 }
 
 .modal::before {

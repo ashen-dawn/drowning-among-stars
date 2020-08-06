@@ -1,6 +1,7 @@
 export enum GameEventType {
   Message = 'message',
-  Command = 'command'
+  Command = 'command',
+  Pause = 'pause'
 }
 
 export default class GameEvent {
@@ -26,5 +27,14 @@ export class GameEventCommand extends GameEvent {
   constructor(command : string) {
     super(GameEventType.Command)
     this.command = command
+  }
+}
+
+export class GameEventPause extends GameEvent {
+  readonly resolved : boolean
+
+  constructor() {
+    super(GameEventType.Pause)
+    this.resolved = false
   }
 }
