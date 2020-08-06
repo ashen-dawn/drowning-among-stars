@@ -4,7 +4,7 @@ import {EventEmitter} from 'events'
 const sharedState = {}
 const stateChanged = new EventEmitter()
 
-const updateSharedState = (key, state) => {
+export const updateSharedState = (key, state) => {
   sharedState[key] = state
   stateChanged.emit(key)
 }

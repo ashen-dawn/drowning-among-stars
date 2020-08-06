@@ -5,5 +5,7 @@ export default [
   require('./go'),
   require('./open'),
   require('./unlockDoor'),
-  require('./take')
+  require('./take'),
+  require('./inventory'),
+  require('./help')
 ]

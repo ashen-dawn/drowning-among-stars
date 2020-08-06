@@ -212,6 +212,9 @@ export default class Game {
   findObjectByName(name : string | undefined | null, type : ObjectType) : GameObject | null {
     if(!name) return null;
 
+    if(/^the /.test(name))
+      return this.findObjectByName(name.replace(/^the /, ''), type)
+
     let lowerCaseName = name.toLocaleLowerCase()
 
     let collection
