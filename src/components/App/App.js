@@ -7,8 +7,10 @@ import {Provider as LoadProvider} from '../../hooks/useLoadGame'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 import backgroundURL from './background.png'
+import Loader from '../Loader/Loader';
 
 function App({promptVisible, onCommand, game}) {
+  const [loading, setLoading] = useState(true)
   const [state, setState] = useState({messages: []})
 
   const {width, height} = useWindowSize()
@@ -23,6 +25,9 @@ function App({promptVisible, onCommand, game}) {
     game.getState()
     game.saveDraft()
   }, [game])
+
+  if(loading)
+    return <Loader onLoad={() => setLoading(false)}/>
 
   return (
     <StateProvider value={state}>
