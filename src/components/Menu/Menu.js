@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styles from './Menu.module.css'
 import useSharedState from '../../hooks/useSharedState'
 import Inventory from '../Modals/Inventory'
@@ -15,6 +15,16 @@ export default function ({containerRef}) {
       return name
     })
   }
+
+  useEffect(() => {
+    function handleKey(ev) {
+      if(ev.key !== 'Escape') return
+      setCurrentMenu(null)
+    }
+
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [])
 
   return (
     <div ref={containerRef} className={styles.menuBar}>
