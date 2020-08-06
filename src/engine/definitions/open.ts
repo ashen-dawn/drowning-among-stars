@@ -23,4 +23,12 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
     const mutable = game.findObjectByName(door.name, ObjectType.Door);
     (mutable as Draft<Door>).open = true
   })
+
+
+  parser.understand('openItem')
+    .as('open [item]')
+
+  rules.onCommand('openItem', () => {
+    game.say(`You don't believe that can be opened!`)
+  })
 }

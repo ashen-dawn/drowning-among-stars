@@ -1,6 +1,7 @@
 import {game, rules, renderer} from './engine/'
 
 import './rooms.tsx'
+import { ValidCommandDetails } from './engine/types/ParsedCommand'
 
 // Initial player location
 game.getState().player.location = 'cabin'
@@ -20,7 +21,7 @@ const setItemLastLoc = () => game.findObjectsInRoom(game.getCurrentRoom()!.name)
 rules.onGameStart(setItemLastLoc)
 rules.onAfterCommand(setItemLastLoc)
 
-game.addItem('Block', 'A boring wooden block', 'commons')
+game.addItem('block', 'A boring wooden block', 'commons')
 
 game.saveDraft()
 
@@ -31,6 +32,15 @@ rules.onGameStart(() => {
   game.say(`It'll be fun they said.`)
   game.pause()
   game.clear()
+})
+
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'openItem') return
+  if(command.subject?.name !== 'block') return;
+
+  console.log('opening block')
+
+  throw new Error()
 })
 
 
