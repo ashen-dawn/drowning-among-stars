@@ -80,6 +80,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
     if(!outputPaused) return;
 
     function handleKey(ev) {
+      if(!!currentMenu) return;
       if(ev.key !== ' ' && ev.key !== 'Enter') return;
       ev.preventDefault()
 
@@ -91,7 +92,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
 
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [currentPause, outputPaused, messages])
+  }, [currentPause, outputPaused, messages, currentMenu])
 
   return (
     <>
