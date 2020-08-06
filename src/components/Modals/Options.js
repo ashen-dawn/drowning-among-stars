@@ -56,7 +56,7 @@ export default function () {
 
       saveData(serializeState(gameState))
 
-      setCurrentMenu(null)
+      setTimeout(() => setCurrentMenu(null), 200)
     }
 
     function load() {
