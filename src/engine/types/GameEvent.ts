@@ -1,7 +1,8 @@
 export enum GameEventType {
   Message = 'message',
   Command = 'command',
-  Pause = 'pause'
+  Pause = 'pause',
+  Clear = 'clear'
 }
 
 export default class GameEvent {
@@ -36,5 +37,11 @@ export class GameEventPause extends GameEvent {
   constructor() {
     super(GameEventType.Pause)
     this.resolved = false
+  }
+}
+
+export class GameEventClear extends GameEvent {
+  constructor() {
+    super(GameEventType.Clear)
   }
 }

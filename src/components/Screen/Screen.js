@@ -24,8 +24,11 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
   const currentPause = messages.findIndex(message => (message.type === 'pause' && message.resolved === false))
   const outputPaused = currentPause > -1
 
-  let printedMessages = !outputPaused ? messages : messages.slice(0, currentPause)
+  const printedMessages = !outputPaused ? messages : messages.slice(0, currentPause)
   const promptVisible = promptEnabled && !outputPaused
+
+  const clearedIndex = printedMessages.findIndex(message => message.type === 'clear')
+  const finalMessages = (clearedIndex < 0) ? printedMessages : printedMessages.slice(clearedIndex)
 
   async function onSubmit(ev) {
     if(ev) ev.preventDefault()
@@ -95,7 +98,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
       <div ref={textRef} className={styles.playArea}>
         <Menu containerRef={menuRef}/>
         <div ref={outputRef} onScroll={() => setCurrentScroll(outputRef.current?.scrollTop)} className={styles.output + (currentMenu !== null ? ' ' + styles.noMouse : '')}>
-          {printedMessages.map((message, i) => {
+          {finalMessages.map((message, i) => {
             if(message.type === 'message')
               return <ReactMarkdown key={i}>{message.message}</ReactMarkdown>
 
@@ -114,7 +117,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
           <input autoFocus ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
         </form>
       </div>
-      {showReflection && <Reflection outputPaused={outputPaused} promptVisible={promptVisible} messages={printedMessages} currentInput={currentInput} currentScroll={currentScroll}/>}
+      {showReflection && <Reflection outputPaused={outputPaused} promptVisible={promptVisible} messages={finalMessages} currentInput={currentInput} currentScroll={currentScroll}/>}
     </>
   )
 }

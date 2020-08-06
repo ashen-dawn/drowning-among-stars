@@ -30,6 +30,7 @@ rules.onGameStart(() => {
   game.pause()
   game.say(`It'll be fun they said.`)
   game.pause()
+  game.clear()
 })
 
 
