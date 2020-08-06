@@ -22,6 +22,7 @@ export default function Map() {
   }, []) // eslint-disable-line
 
   const currentRoom = (roomName && gameState.rooms.get(roomName)) || null
+  const itemsInRoom = Array.from(gameState.items.values()).filter(({lastKnownLocation}) => lastKnownLocation === roomName)
 
   return (
     <div className={styles.map}>
@@ -53,7 +54,15 @@ export default function Map() {
           <>
             <h3>{currentRoom.printableName}</h3>
             {currentRoom.visited
-              ? <ReactMarkdown>{currentRoom.description}</ReactMarkdown>
+              ? (<>
+                <ReactMarkdown>{currentRoom.description}</ReactMarkdown>
+                {itemsInRoom.length > 0 && (<>
+                  <p>You {(playerLocation === roomName) ? 'see' : 'recall seeing'} the following items here:</p>
+                  <ul>
+                    {itemsInRoom.map(({name}) => <li>{name}</li>)}
+                  </ul>
+                </>)}
+              </>)
               : <p>Visit this room to unlock its description</p>}
           </>
         ) : (

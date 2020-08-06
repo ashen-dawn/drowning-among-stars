@@ -7,5 +7,7 @@ export default [
   require('./unlockDoor'),
   require('./take'),
   require('./inventory'),
-  require('./help')
+  require('./help'),
+  require('./options'),
+  require('./map')
 ]
