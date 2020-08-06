@@ -3,6 +3,7 @@ import styles from './Menu.module.css'
 import useSharedState from '../../hooks/useSharedState'
 import Inventory from '../Modals/Inventory'
 import Options from '../Modals/Options'
+import Help from '../Modals/Help'
 import Map from '../Modals/Map'
 
 export default function ({containerRef}) {
@@ -49,6 +50,9 @@ export default function ({containerRef}) {
 
                 if(currentMenu === 'options')
                   return <Options/>
+
+                if(currentMenu === 'help')
+                  return <Help />
 
                 return <p>Not implemented yet, sorry</p>
               })()}

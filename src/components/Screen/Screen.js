@@ -80,11 +80,10 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
     if(!outputPaused) return;
 
     function handleKey(ev) {
-      if(!!currentMenu) return;
+      if(currentMenu) return;
       if(ev.key !== ' ' && ev.key !== 'Enter') return;
       ev.preventDefault()
 
-      console.log('Unpausing')
       game.getState().messages[currentPause].resolved = true
       game.saveDraft()
       forceRender()
@@ -115,7 +114,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
           )}
         </div>
         <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')} onSubmit={onSubmit}>
-          <input autoFocus ref={inputRef} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
+          <input autoFocus ref={inputRef} readOnly={(promptVisible && !currentMenu) ? undefined : ''} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
         </form>
       </div>
       {showReflection && <Reflection outputPaused={outputPaused} promptVisible={promptVisible} messages={finalMessages} currentInput={currentInput} currentScroll={currentScroll}/>}
