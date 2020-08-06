@@ -10,7 +10,11 @@ const images = [background, map, mapPerson]
 
 export default function Loader({onLoad}) {
   useEffect(() => {
-    Promise.all(images.map(preloadImage)).then(onLoad)
+    Promise.all(images.map(preloadImage)).then(onLoad).catch(console.error.bind(console))
+
+    // In case of failure - just launch the darn thing without images
+    // after 10 seconds
+    setTimeout(onLoad, 10000)
   }, [])
 
   return (
