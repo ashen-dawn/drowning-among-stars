@@ -1,7 +1,6 @@
 import {game, rules, renderer} from './engine/'
 
 import './rooms.tsx'
-import { ValidCommandDetails } from './engine/types/ParsedCommand'
 
 // Initial player location
 game.getState().player.location = 'cabin'

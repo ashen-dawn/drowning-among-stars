@@ -15,7 +15,7 @@ export default function Loader({onLoad}) {
     // In case of failure - just launch the darn thing without images
     // after 10 seconds
     setTimeout(onLoad, 10000)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={styles.container}>
