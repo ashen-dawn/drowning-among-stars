@@ -1,34 +1,9 @@
-import React, { useEffect, useContext } from 'react'
-import {ScreenContext} from '../Screen/Screen'
+import React from 'react'
 
 import styles from './Help.module.css'
-import useSharedState from '../../hooks/useSharedState'
 
 export default function Help({parentRef}) {
-  const [scroll, setScroll] = useSharedState('helpScroll', 0)
-  const whichScreen = useContext(ScreenContext)
-
-  // Update to top
-  useEffect(() => setScroll(0), [])
-
-  // Update shared state on scroll
-  useEffect(() => {
-    if(!parentRef.current) return;
-    if(whichScreen === 'secondary') return;
-
-    function updateScroll(ev){
-      setScroll(ev.target.scrollTop)
-    }
-
-    parentRef.current.addEventListener('scroll', updateScroll)
-    return () => parentRef.current.removeEventListener('scroll', updateScroll)
-  }, [parentRef])
-
-  // On shared state change, set scrollTop
-  useEffect(() => {
-    if(whichScreen !== 'primary' && parentRef.current)
-      parentRef.current.scrollTop = scroll
-  }, [scroll, parentRef])
+  // useSyncScroll(parentRef, 'helpScroll')
 
   return <>
     <h3>How do I play?</h3>

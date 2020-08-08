@@ -5,10 +5,12 @@ import Inventory from '../Modals/Inventory'
 import Options from '../Modals/Options'
 import Help from '../Modals/Help'
 import Map from '../Modals/Map'
+import useSyncScroll from '../../hooks/useSyncScroll'
 
 export default function ({containerRef}) {
   const scrollRef = useRef()
   const [currentMenu, setCurrentMenu] = useSharedState('currentMenu')
+  useSyncScroll(scrollRef, 'modalScroll', [currentMenu])
 
   function handleButton(name) {
     return ev => setCurrentMenu(current => {
