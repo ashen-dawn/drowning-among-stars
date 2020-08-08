@@ -45,8 +45,8 @@ export default function Map() {
       </Floor>
 
       <div className={styles.floorSelector}>
-        <button className={currentFloor === 'upper' && styles.selectedFloor} onClick={()=>setFloor('upper')}>Upper</button>
-        <button className={currentFloor === 'lower' && styles.selectedFloor} onClick={()=>setFloor('lower')}>Lower</button>
+        <button className={currentFloor === 'upper' ? styles.selectedFloor : ''} onClick={()=>setFloor('upper')}>Upper</button>
+        <button className={currentFloor === 'lower' ? styles.selectedFloor : ''} onClick={()=>setFloor('lower')}>Lower</button>
       </div>
 
       <div className={styles.description}>
