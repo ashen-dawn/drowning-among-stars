@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useRef, useEffect} from 'react'
 import styles from './Menu.module.css'
 import useSharedState from '../../hooks/useSharedState'
 import Inventory from '../Modals/Inventory'
@@ -7,6 +7,7 @@ import Help from '../Modals/Help'
 import Map from '../Modals/Map'
 
 export default function ({containerRef}) {
+  const scrollRef = useRef()
   const [currentMenu, setCurrentMenu] = useSharedState('currentMenu')
 
   function handleButton(name) {
@@ -40,7 +41,7 @@ export default function ({containerRef}) {
               {currentMenu}
               <button className={styles.modalClose} onClick={() => setCurrentMenu(null)}>x</button>
             </div>
-            <div className={styles.modalContent}>
+            <div className={styles.modalContent} ref={scrollRef}>
               {(() => {
                 if(currentMenu === 'inventory')
                   return <Inventory/>
@@ -52,7 +53,7 @@ export default function ({containerRef}) {
                   return <Options/>
 
                 if(currentMenu === 'help')
-                  return <Help />
+                  return <Help parentRef={scrollRef} />
 
                 return <p>Not implemented yet, sorry</p>
               })()}

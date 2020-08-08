@@ -8,6 +8,8 @@ import useSharedState from '../../hooks/useSharedState'
 
 import {game} from '../../engine'
 
+export const ScreenContext = React.createContext()
+
 export default function Text({promptVisible: promptEnabled, handleCommand, showReflection}) {
   const inputRef = useRef()
   const outputRef = useRef()
@@ -96,28 +98,34 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
   return (
     <>
       <div ref={textRef} className={styles.playArea}>
-        <Menu containerRef={menuRef}/>
-        <div ref={outputRef} onScroll={() => setCurrentScroll(outputRef.current?.scrollTop)} className={styles.output + (!!currentMenu ? ' ' + styles.noMouse : '')}>
-          {finalMessages.map((message, i) => {
-            if(message.type === 'message')
-              return <ReactMarkdown key={i}>{message.message}</ReactMarkdown>
+        <ScreenContext.Provider value="primary">
+          <Menu containerRef={menuRef}/>
+          <div ref={outputRef} onScroll={() => setCurrentScroll(outputRef.current?.scrollTop)} className={styles.output + (!!currentMenu ? ' ' + styles.noMouse : '')}>
+            {finalMessages.map((message, i) => {
+              if(message.type === 'message')
+                return <ReactMarkdown key={i}>{message.message}</ReactMarkdown>
 
-            if(message.type === 'command')
-              return <p key={i} className={styles.command}>{message.command}</p>
+              if(message.type === 'command')
+                return <p key={i} className={styles.command}>{message.command}</p>
 
-            return null
-          })}
-          {outputPaused && (
-            <p className={styles.pausePrompt}>
-              (Press [RETURN] to continue)
-            </p>
-          )}
-        </div>
-        <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')} onSubmit={onSubmit}>
-          <input autoFocus ref={inputRef} readOnly={(promptVisible && !currentMenu) ? undefined : ''} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
-        </form>
+              return null
+            })}
+            {outputPaused && (
+              <p className={styles.pausePrompt}>
+                (Press [RETURN] to continue)
+              </p>
+            )}
+          </div>
+          <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')} onSubmit={onSubmit}>
+            <input autoFocus ref={inputRef} readOnly={(promptVisible && !currentMenu) ? undefined : ''} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
+          </form>
+        </ScreenContext.Provider>
       </div>
-      {showReflection && <Reflection outputPaused={outputPaused} promptVisible={promptVisible} messages={finalMessages} currentInput={currentInput} currentScroll={currentScroll}/>}
+      {showReflection && (
+        <ScreenContext.Provider value="secondary">
+          <Reflection outputPaused={outputPaused} promptVisible={promptVisible} messages={finalMessages} currentInput={currentInput} currentScroll={currentScroll}/>
+        </ScreenContext.Provider>
+      )}
     </>
   )
 }
