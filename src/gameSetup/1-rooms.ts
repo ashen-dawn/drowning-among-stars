@@ -1,4 +1,4 @@
-import {game} from './engine'
+import {game} from '../engine'
 
 game.addRoom('cabin', 'Crew Cabin', `
 A dark and dingy room with a single bunk bed along the starboard side.

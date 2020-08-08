@@ -51,7 +51,6 @@ export default function Help({parentRef}) {
       <li>drop [thing]</li>
       <li>open [thing]</li>
       <li>close [thing]</li>
-      <li>put [thing] in [thing]</li>
     </ul>
   </>
 }
