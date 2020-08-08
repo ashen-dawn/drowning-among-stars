@@ -20,4 +20,23 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
     item.location = 'inventory'
     game.say('Taken.')
   })
+
+  parser.understand('drop')
+    .as('drop [item]')
+    .as('put down [item]')
+    .as('yeet [item]')
+    .as('discard [item]')
+    .as('abandon [item]')
+    .as('chuck [item]')
+    .as('throw [item]')
+    .as('throw away [item]')
+    .as('toss [item]')
+    .as('trash [item]')
+
+  rules.onCommand('drop', command => {
+    const item = command.subject as Draft<Item>
+
+    item.location = game.getCurrentRoom()!.name
+    game.say('Dropped.')
+  })
 }
