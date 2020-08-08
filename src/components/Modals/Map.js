@@ -30,7 +30,7 @@ export default function Map() {
 
       <Floor name="upper" currentSelected={currentFloor} setCurrentFloor={setFloor}>
         <Room name="bridge"     top={15} left={25} width={20} height={15} currentSelected={roomName} setSelected={setRoom}/>
-        <Room name="commons"    top={35} left={25} width={20} height={30} currentSelected={roomName} setSelected={setRoom}/>
+        <Room name="comms"    top={35} left={25} width={20} height={30} currentSelected={roomName} setSelected={setRoom}/>
         <Room name="cabin"      top={35} left={50} width={10} height={20} currentSelected={roomName} setSelected={setRoom}/>
         <Room name="bathroom"   top={60} left={50} width={10} height={10} currentSelected={roomName} setSelected={setRoom}/>
         <Room name="medbay"     top={35} left={10} width={10} height={20} currentSelected={roomName} setSelected={setRoom}/>

@@ -14,7 +14,7 @@ A barren metal bowl sits below a cracked mirror and above a small cupboard.
 `)
 
 // TODO: Room descriptions
-game.addRoom('commons', 'Common Room', `// TODO`)
+game.addRoom('comms', 'Comms Room', `// TODO`)
 game.addRoom('bridge', 'Bridge', `// TODO`)
 game.addRoom('medbay', 'Medical Bay', `// TODO`)
 game.addRoom('stairupper', 'Upper Stairwell', `// TODO`)
@@ -25,9 +25,9 @@ game.addRoom('docking', 'Docking Bay', `// TODO`)
 
 // Regular hallways
 game.setNeighbor('cabin', 'aft', 'bathroom')
-game.setNeighbor('cabin', 'port', 'commons')
-game.setNeighbor('commons', 'port', 'medbay')
-game.setNeighbor('commons', 'fore', 'bridge')
+game.setNeighbor('cabin', 'port', 'comms')
+game.setNeighbor('comms', 'port', 'medbay')
+game.setNeighbor('comms', 'fore', 'bridge')
 game.setNeighbor('medbay', 'aft', 'stairupper')
 game.setNeighbor('stairupper', 'down', 'stairlower')
 game.setNeighbor('stairlower', 'fore', 'mainframe')

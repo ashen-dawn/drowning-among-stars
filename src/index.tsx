@@ -20,7 +20,7 @@ const setItemLastLoc = () => game.findObjectsInRoom(game.getCurrentRoom()!.name)
 rules.onGameStart(setItemLastLoc)
 rules.onAfterCommand(setItemLastLoc)
 
-game.addItem('block', 'A boring wooden block', 'commons')
+game.addItem('block', 'A boring wooden block', 'comms')
 
 game.saveDraft()
 
