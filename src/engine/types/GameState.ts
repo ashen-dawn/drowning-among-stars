@@ -54,5 +54,6 @@ export type Item = GameObject & {
   readonly type : ObjectType.Item,
   readonly location: ObjectID | 'inventory',
   readonly seen : boolean,
-  readonly lastKnownLocation? : string
+  readonly lastKnownLocation? : string,
+  readonly carryable : boolean
 }

@@ -180,12 +180,13 @@ export default class Game {
     return door
   }
 
-  addItem(name : string, description : string, location : string) : Draft<Item> {
+  addItem(name : string, description : string, location : string, carryable : boolean = false) : Draft<Item> {
     let item : Item = {
       type: ObjectType.Item,
       name, aliases: [], printableName: name, description,
       location,
-      seen: false
+      seen: false,
+      carryable
     }
 
     let state = this.getState()

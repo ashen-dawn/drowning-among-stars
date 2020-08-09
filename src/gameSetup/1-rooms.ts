@@ -31,7 +31,7 @@ rules.onAfterCommand(() => {
   if(flashlightLocation === 'inventory' && !wrenchExists){
     if(game.getProperty('gamePhase') < Phase.hasFlashlight)
       game.setProperty('gamePhase', Phase.hasFlashlight)
-    game.addItem('wrench', 'Just generally useful for repairs and adjustments to the various mechanical parts of the ship.', 'cabin')
+    game.addItem('wrench', 'Just generally useful for repairs and adjustments to the various mechanical parts of the ship.', 'cabin', true)
   }
 })
 
@@ -55,7 +55,7 @@ The crew cabin is through the foreward door, and the little remaining space
 is occupied with a sink and cabinet.
 `)
 
-const flashlight = game.addItem('flashlight', 'Metal rod with some LEDs embedded along its length', 'bathroom')
+const flashlight = game.addItem('flashlight', 'Metal rod with some LEDs embedded along its length', 'bathroom', true)
 flashlight.aliases.push('flash light')
 flashlight.aliases.push('light')
 flashlight.aliases.push('torch')

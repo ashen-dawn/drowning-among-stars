@@ -17,6 +17,9 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
   rules.onCommand('take', command => {
     const item = command.subject as Draft<Item>
 
+    if(!item.carryable)
+      throw new Error(`You cannot pick up the ${item.name}`)
+
     item.location = 'inventory'
     game.say('Taken.')
   })
