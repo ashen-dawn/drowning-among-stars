@@ -75,8 +75,8 @@ export default class ParsedCommand {
     let object : GameObject | null = null
 
     for(const noun of nouns) {
-      let gameObject = game.findObjectByName(noun.name, noun.itemType)
-      if(!gameObject || (gameObject.type === ObjectType.Item && !((gameObject as Item).seen)))
+      let possibleObjects = game.findObjectsByName(noun.name, noun.itemType).filter(gameObject => (gameObject.type !== ObjectType.Item || ((gameObject as Item).seen)))
+      if(possibleObjects.length < 1)
         return {
           isValid: false,
           command: this,
@@ -84,10 +84,10 @@ export default class ParsedCommand {
           severity: ParsingErrorSeverity.NoSuchObject
         }
 
-      // TODO: Optionally print "the" depending on if the original
-      // command name had one at the beginning (don't print the the book)
-      // (but also don't do "you cannot see heart of the cards")
-      if(!game.isVisible(gameObject))
+      let visibleObjects = possibleObjects.filter(gameObject => game.isVisible(gameObject))
+      if(visibleObjects.length < 1) {
+        const gameObject = possibleObjects[0]
+
         return {
           isValid: false,
           command: this,
@@ -98,7 +98,9 @@ export default class ParsedCommand {
           })()}`,
           severity: ParsingErrorSeverity.NotVisible
         }
+      }
 
+      const gameObject = visibleObjects[0]
       if(noun.sentencePosition === NounPosition.Subject)
         subject = gameObject
       else

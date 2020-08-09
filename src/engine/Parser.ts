@@ -21,7 +21,8 @@ export default class Parser {
     this.game.outputCommand(rawCommand)
     this.game.saveDraft()
 
-    const timer = delay(200)
+    const timerDelay = 100
+    const timer = delay(timerDelay)
 
     try {
       renderer.hidePrompt()
@@ -29,8 +30,9 @@ export default class Parser {
       await this.runCommand(rawCommand)
       let end = window.performance.now()
 
-      if(end - start > 200)
+      if(end - start > timerDelay)
         console.warn(`Command execution took ${end - start}ms`)
+
       await timer
     } catch (err) {
       await timer
@@ -39,7 +41,6 @@ export default class Parser {
       else if(err.message)
         game.say(err.message)
       else{
-        game.say('An unknown error occured')
         console.error(err)
       }
     } finally {

@@ -6,6 +6,13 @@ A dark and dingy room with a single bunk bed along the starboard side.
 The washroom is to the aft, with the comms room to port.
 `)
 
+const cabinDoor = game.addItem('cabin door', `
+Large, metal retractable doors designed to keep air from escaping through them.
+`, 'cabin')
+
+cabinDoor.aliases = ['security doors', 'door', 'doors']
+cabinDoor.printableName = 'security doors'
+
 game.addRoom('bathroom', 'Washroom', `
 Tight, cramped, but serviceable.  The _Dawn_ was really only meant for a crew
 of one or two, and that is no more evident than here.
@@ -47,6 +54,14 @@ event it would still save your life . . . at least you hope it would.
 
 The stairwell is to the aft, with the comms room to starboard.
 `)
+
+const medDoor = game.addItem('med door', `
+Large, metal retractable doors designed to keep air from escaping through them.
+`, 'medbay')
+
+medDoor.aliases = ['security doors', 'door', 'doors']
+medDoor.printableName = 'security doors'
+
 
 game.addRoom('stairupper', 'Upper Stairwell', `
 A large window in the aft wall shows the view of an unknown star system
@@ -114,8 +129,8 @@ game.setNeighbor('stairupper', 'down', 'stairlower')
 game.setNeighbor('stairlower', 'fore', 'mainframe')
 game.setNeighbor('mainframe', 'starboard', 'engine')
 game.setNeighbor('engine', 'starboard', 'docking')
+game.setNeighbor('cabin', 'port', 'comms')
+game.setNeighbor('medbay', 'starboard', 'comms')
 
 // DEBUG hallways
-// game.setNeighbor('bathroom', 'down', 'docking')
-// game.setNeighbor('cabin', 'port', 'comms')
-// game.setNeighbor('comms', 'port', 'medbay')
+game.setNeighbor('bathroom', 'down', 'docking')

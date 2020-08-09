@@ -227,11 +227,11 @@ export default class Game {
     b.neighbors.set(opposite, a.name)
   }
 
-  findObjectByName(name : string | undefined | null, type : ObjectType) : GameObject | null {
-    if(!name) return null;
+  findObjectsByName(name : string | undefined | null, type : ObjectType) : GameObject[] {
+    if(!name) return [];
 
     if(/^the /.test(name))
-      return this.findObjectByName(name.replace(/^the /, ''), type)
+      return this.findObjectsByName(name.replace(/^the /, ''), type)
 
     let lowerCaseName = name.toLocaleLowerCase()
 
@@ -254,17 +254,36 @@ export default class Game {
         break
     }
 
-    const objects = [...collection!.values()]
+    const objects : GameObject[] = [...collection!.values()]
+    const matching = [
+      // Exact name
+      ...objects.filter((object) => lowerCaseName === object.name.toLocaleLowerCase()),
+      // Aliases
+      ...objects.filter(({aliases}) => aliases.map(a => a.toLocaleLowerCase()).includes(lowerCaseName))
+    ]
 
-    const exactMatch = objects.find((object) => lowerCaseName === object.name.toLocaleLowerCase())
-    if(exactMatch)
-      return exactMatch
+    // Filter duplicates
+    const seenDict : any = {}
 
-    const aliasMatch = objects.find(({aliases}) => aliases.map(a => a.toLocaleLowerCase()).includes(lowerCaseName))
-    if(aliasMatch)
-      return aliasMatch
+    return matching.filter(({name}) => {
+      if(seenDict[name])
+        return false
 
-    return null
+      seenDict[name] = name
+      return true
+    })
+  }
+
+  findObjectByName(name : string | undefined | null, type : ObjectType) : GameObject | null {
+    const candidates = this.findObjectsByName(name, type)
+
+    if(candidates.length < 1)
+      return null
+
+    if(candidates.length > 1)
+      console.warn(`Duplicate objects found for name ${name}`)
+
+    return candidates[0]
   }
 
   findObjectsInRoom(name : string | undefined) : Draft<Item> [] {

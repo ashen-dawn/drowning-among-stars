@@ -10,5 +10,6 @@ export default [
   require('./help'),
   require('./options'),
   require('./map'),
-  require('./hint')
+  require('./hint'),
+  require('./start')
 ]

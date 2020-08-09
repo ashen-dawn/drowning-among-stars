@@ -3,7 +3,6 @@ import Game from "../engine/Game"
 
 export function printLocDescription(game : Game) {
   const location = game.getCurrentRoom()!
-  console.log('printing')
 
   game.say(`**${capitalize(location.printableName)}**`)
   game.say(location.description!)

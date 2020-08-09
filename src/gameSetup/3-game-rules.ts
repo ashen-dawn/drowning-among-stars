@@ -1,4 +1,4 @@
-import {game, rules} from '../engine'
+import {game, rules, parser} from '../engine'
 import { ObjectType, Item } from '../engine/types/GameState'
 import { Draft } from 'immer'
 import { Phase } from './2-phases-and-hints'
@@ -13,6 +13,47 @@ rules.on('beforePrintItems', () => {
 
   if(flashlightLocation !== 'inventory' && playerLocation === 'cabin')
     throw new Error('You cannot make out much more without light.')
+})
+
+/**
+ * Do not allow going west from cabin
+ */
+rules.onBeforeCommand(command => {
+  const playerLocation = game.getCurrentRoom()?.name
+  if(command.verb.name !== 'go' || playerLocation !== 'cabin' || command.subject?.name !== 'port')
+    return;
+
+  throw new Error(`The security doors have sealed - you're either going to need to restart the mainframe or find a way to force these open before you can access the comms room.`)
+})
+
+/**
+ * Do not allow going east from medbay until opened
+ */
+rules.onBeforeCommand(command => {
+  const playerLocation = game.getCurrentRoom()?.name
+  if(command.verb.name !== 'go' || playerLocation !== 'medbay' || command.subject?.name !== 'starboard')
+    return;
+
+  if(game.getProperty('gamePhase') < Phase.openedDoor)
+    throw new Error(`The security doors have sealed - you're either going to need to restart the mainframe or find a way to force these open before you can access the comms room.`)
+})
+
+/**
+ * Do not allow opening security doors
+ */
+rules.onBeforeCommand(command => {
+  const playerLocation = game.getCurrentRoom()?.name
+  if(command.verb.name !== 'openItem' || !command.subject?.aliases.includes('security doors'))
+    return;
+
+  if(playerLocation === 'cabin')
+    parser.runCommand('go port')
+
+  if(playerLocation === 'medbay')
+    parser.runCommand('go starboard')
+
+  // Do not print regular command output
+  throw new Error()
 })
 
 /**
@@ -111,4 +152,36 @@ rules.onAfterCommand(command => {
 
   if(game.getProperty('gamePhase') < Phase.fixedLifeSupport)
     game.say(`_Focus_, you remind yourself.  _The engine is pretty but I've gotta fix that CO<sub>2</sub> filter before I'll have time to bother with this._`)
+})
+
+/**
+ * Turn on flashlight
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'start' || command.subject?.name !== 'flashlight') return;
+
+  const light = game.findObjectByName('flashlight', ObjectType.Item) as Item
+
+  if(light.location === 'inventory')
+    throw new Error('It is already on')
+  else{
+    parser.runCommand(`take ${light.name}`)
+    throw new Error()
+  }
+})
+
+/**
+ * Cannot turn on engine
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'start' || command.subject?.name !== 'engine') return;
+
+  const currentPhase = game.getProperty('gamePhase')
+  if(currentPhase < Phase.fixedLifeSupport)
+    throw new Error(`You probably should restart the CO<sub>2</sub> filter before worrying about the engine.`)
+
+  if(currentPhase < Phase.examinedMainframe)
+    throw new Error(`As far as you can tell the engine _itself_ is fine, perhaps something is wrong with the mainframe's control systems?`)
+
+  throw new Error(`The mainframe's engine control systems have been damaged and will have to be repaired before the engine can be started.`)
 })

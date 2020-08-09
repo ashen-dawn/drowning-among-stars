@@ -5,6 +5,14 @@ import { ObjectType, Door } from "../types/GameState";
 import { Draft } from "immer";
 
 export default function(parser : Parser, rules : RulesEngine, game : Game) {
+  parser.understand('openItem')
+    .as('open [item]')
+    .as('open [item] with [item|object]')
+
+  rules.onCommand('openItem', () => {
+    game.say(`You don't believe that can be opened!`)
+  })
+
   parser.understand('openDoor')
     .as('open [door]')
 
@@ -22,14 +30,5 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
 
     const mutable = game.findObjectByName(door.name, ObjectType.Door);
     (mutable as Draft<Door>).open = true
-  })
-
-
-  parser.understand('openItem')
-    .as('open [item]')
-    .as('open [item] with [item|object]')
-
-  rules.onCommand('openItem', () => {
-    game.say(`You don't believe that can be opened!`)
   })
 }
