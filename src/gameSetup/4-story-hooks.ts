@@ -81,8 +81,7 @@ rules.onAfterCommand(command => {
  * Dropping from bathroom to docking bay for the first time
  */
 rules.onAfterCommand(command => {
-  // When going down from the bathroom . . .
-  if(command.verb.name !== 'go' || command.subject?.name !== 'down' || game.getCurrentRoom()?.name !== 'bathroom')
+  if(command.verb.name !== 'go' || command.subject?.name !== 'down' || game.getCurrentRoom()?.name !== 'docking')
     return
 
   // Only do once
@@ -100,4 +99,21 @@ rules.onAfterCommand(command => {
 
   game.pause()
   game.clear()
+  rules.printArea()
+})
+
+/**
+ * Entering lower stairwell for first time
+ */
+rules.onAfterCommand(command => {
+  if(command.verb.name !== 'go' || command.subject?.name !== 'aft' || game.getCurrentRoom()?.name !== 'stairlower')
+    return
+
+  // Only do once
+  if(game.hasProperty('printedLowerStairwell'))
+    return
+  else
+    game.createProperty('printedLowerStairwell', true)
+
+  game.say(`As you look up the stairway you catch a glimpse of light filtering down from above - must be near a star cluster you suppose.  Not really any good way to know which one until you can bring the navigation systems back online.`)
 })

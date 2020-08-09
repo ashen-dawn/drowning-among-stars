@@ -29,7 +29,7 @@ hints.set(Phase.hasFlashlight, 'With the security door shut and power cut off, y
 hints.set(Phase.checkedUnderSink, `There is a panel under the sink that you might be able to fit through - you'll need a wrench to get it open though.`)
 hints.set(Phase.gotWrench, `You have a wrench and can open the panel under the sink.`)
 hints.set(Phase.openedSinkPanel, 'You can get to the lower deck through the panel under the sink, but be sure not to leave anything behind!')
-hints.set(Phase.droppedBelow, 'You need to re-start the CO2 scrubber before you run out of clean air.')
+hints.set(Phase.droppedBelow, 'You need to re-start the CO<sub>2</sub> scrubber before you run out of clean air.')
 hints.set(Phase.fixedLifeSupport, 'While the immediate threat to your life has been solved, you need to bring the engine back on so you can restore power to your ship.')
 hints.set(Phase.examinedEngine, 'The engine itself seems to be in good repair, time to go to the mainframe and start up its control systems.')
 hints.set(Phase.examinedMainframe, 'The engine control systems are missing [thing].  There\'s a spare in the comm room locker, but you\'ll have to find a way to get there.')

@@ -87,6 +87,8 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
       if(ev.key !== ' ' && ev.key !== 'Enter') return;
       ev.preventDefault()
 
+      inputRef.current.value = ''
+      setCurrentInput('')
       game.getState().messages[currentPause].resolved = true
       game.saveDraft()
       forceRender()

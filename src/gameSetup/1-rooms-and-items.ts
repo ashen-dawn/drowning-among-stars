@@ -1,17 +1,11 @@
 import {game} from '../engine'
 
-/**
- * Cabin
- */
 game.addRoom('cabin', 'Crew Cabin', `
 A dark and dingy room with a single bunk bed along the starboard side.
 
 The washroom is to the aft, with the comms room to port.
 `)
 
-/**
- * Washroom
- */
 game.addRoom('bathroom', 'Washroom', `
 Tight, cramped, but serviceable.  The _Dawn_ was really only meant for a crew
 of one or two, and that is no more evident than here.
@@ -30,10 +24,6 @@ cupboard.aliases.push('cupboard')
 cupboard.aliases.push('cupboard door')
 cupboard.aliases.push('cabinet door')
 
-
-/**
- * Comms
- */
 game.addRoom('comms', 'Comms Room', `
 A wide room with pipes and cabling running thick through the floor.
 
@@ -75,7 +65,6 @@ The mainframe is to the fore, and above you the stairs curl up and
 out of sight.
 `)
 
-
 game.addRoom('mainframe', 'Mainframe', `
 The mainframe fills the room with its soft humming, lights blinking
 on and off in a disorderly pattern.
@@ -83,12 +72,30 @@ on and off in a disorderly pattern.
 The stairwell is to the aft, with the engine room to starboard.
 `)
 
+const computer = game.addItem('mainframe', `
+Filling almost the entire room, the mainframe serves as the ship's primary control
+computer.  It regulates engine power, controls the navigation and piloting systems,
+and even has a few games built in!
+
+Of course, with the engine not running the mainframe is currently in low power
+mode - you'll have to start the engine up again to restore full functionality.
+`, 'mainframe')
+computer.aliases.push('computer')
+computer.aliases.push('engine controller')
+computer.aliases.push('control circuit')
+
 game.addRoom('engine', 'Engine Room', `
 The usual deep rumble of the ship's engines is missing, leaving a
 disconcerting silence.
 
 The mainframe is to port, with the docking bay to starboard.
 `)
+
+game.addItem('engine', `
+Even running on standby power, your view through the window of the engine is overwhelmingly bright.
+
+At full power the windows have to be polarized to block the blinding glow of the engine's warp singularity - as it is, it's relatively safe to look at.
+`, 'engine')
 
 game.addRoom('docking', 'Docking Bay', `
 A long and wide room for loading and unloading cargo.  The

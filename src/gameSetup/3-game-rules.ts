@@ -102,3 +102,13 @@ rules.onBeforeCommand(command => {
 
   throw new Error('It takes you a few minutes, but eventually you pull up the floor panel.  You should be able to get down to the docking bay from here.')
 })
+
+/**
+ * Add to engine description when CO2 not fixed
+ */
+rules.onAfterCommand(command => {
+  if(command.verb.name !== 'lookAt' || command.subject?.name !== 'engine') return;
+
+  if(game.getProperty('gamePhase') < Phase.fixedLifeSupport)
+    game.say(`_Focus_, you remind yourself.  _The engine is pretty but I've gotta fix that CO<sub>2</sub> filter before I'll have time to bother with this._`)
+})
