@@ -93,6 +93,17 @@ rules.onBeforeCommand(command => {
     throw new Error(`If you put down the flashlight, you will likely not be able to find it again in the dark.`)
 })
 
+/**
+ * If we get "take apart" cabinet, try opening it instead
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'take apart') return;
+
+  if(command.subject?.name === 'cabinet' || command.subject?.name === 'floor panel'){
+    parser.runCommand(`open ${command.subject?.name}`)
+    throw new Error()
+  }
+})
 
 /**
  * When opening the cabinet, insert floor panel
@@ -155,6 +166,16 @@ rules.onAfterCommand(command => {
 })
 
 /**
+ * Add to mainframe description when CO2 not fixed
+ */
+rules.onAfterCommand(command => {
+  if(command.verb.name !== 'lookAt' || command.subject?.name !== 'mainframe') return;
+
+  if(game.getProperty('gamePhase') < Phase.fixedLifeSupport)
+    game.say(`Luckily the CO<sub>2</sub> filter operates independently to the rest of the ship's systems, so you can worry about that fixing first and then come back to the mainframe.`)
+})
+
+/**
  * Turn on flashlight
  */
 rules.onBeforeCommand(command => {
@@ -180,8 +201,62 @@ rules.onBeforeCommand(command => {
   if(currentPhase < Phase.fixedLifeSupport)
     throw new Error(`You probably should restart the CO<sub>2</sub> filter before worrying about the engine.`)
 
-  if(currentPhase < Phase.examinedMainframe)
+  if(currentPhase < Phase.examinedMainframe){
+    game.setProperty('gamePhase', Phase.examinedEngine)
     throw new Error(`As far as you can tell the engine _itself_ is fine, perhaps something is wrong with the mainframe's control systems?`)
+  }
 
   throw new Error(`The mainframe's engine control systems have been damaged and will have to be repaired before the engine can be started.`)
+})
+
+/**
+ * Cannot start mainframe
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'start' || command.subject?.name !== 'mainframe') return;
+
+  const currentPhase = game.getProperty('gamePhase')
+  if(currentPhase < Phase.fixedLifeSupport)
+    throw new Error(`You probably should restart the CO<sub>2</sub> filter before worrying about the mainframe.`)
+
+  if(currentPhase < Phase.examinedMainframe){
+    parser.runCommand(`take apart mainframe`)
+    throw new Error()
+  }
+
+  throw new Error(`The mainframe's engine control system is damaged, and will have to be repaired before you can bring it online.  You believe you have a replacement part in the comms room.`)
+})
+
+/**
+ * Cannot start filter again
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'start' || command.subject?.name !== 'filter') return;
+
+  const currentPhase = game.getProperty('gamePhase')
+  if(currentPhase >= Phase.fixedLifeSupport)
+    throw new Error(`The CO<sub>2</sub> filter is already running.`)
+})
+
+/**
+ * Taking apart engine: error saying that's dangerous, and not something you can do without a drydock
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'take apart' || command.subject?.name !== 'engine') return;
+
+  throw new Error(`Even in non-emergency conditions, the engine is not something you can safely service without bringing the _Dawn_ down at a drydock.`)
+})
+
+/**
+ * Taking apart mainframe: Explain damaged part - after that, say you need the part
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'take apart' || command.subject?.name !== 'mainframe') return;
+
+  const currentPhase = game.getProperty('gamePhase')
+  if(currentPhase < Phase.fixedLifeSupport)
+    throw new Error(`You probably should restart the CO<sub>2</sub> filter before worrying about the mainframe.`)
+
+  if(currentPhase >= Phase.examinedMainframe)
+    throw new Error(`You won't be able to repair the mainframe's control system without the replacement capacitor from the comms room.`)
 })

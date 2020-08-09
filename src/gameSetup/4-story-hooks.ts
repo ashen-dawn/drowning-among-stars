@@ -1,5 +1,7 @@
 import {game, rules} from '../engine'
 import { Phase } from './2-phases-and-hints'
+import { ObjectType, Item } from '../engine/types/GameState'
+import { Draft } from 'immer'
 
 /**
  * Intro
@@ -116,4 +118,59 @@ rules.onAfterCommand(command => {
     game.createProperty('printedLowerStairwell', true)
 
   game.say(`As you look up the stairway you catch a glimpse of light filtering down from above - must be near a star cluster you suppose.  Not really any good way to know which one until you can bring the navigation systems back online.`)
+})
+
+/**
+ * Starting CO2 filter
+ */
+rules.onAfterCommand(command => {
+  if(command.verb.name !== 'start' || command.subject?.name !== 'filter') return;
+
+  const currentPhase = game.getProperty('gamePhase')
+  if(currentPhase >= Phase.fixedLifeSupport)
+    throw new Error(`The CO<sub>2</sub> filter is already running.`)
+
+  const filter = game.findObjectByName('filter', ObjectType.Item) as Draft<Item>
+  filter.description = filter.description?.replace('switched off', 'running')
+
+  game.setProperty('gamePhase', Phase.fixedLifeSupport)
+
+  game.clear()
+
+  game.say(`Okay, with the CO2 scrubber running again, the filter should last for at least a week - plenty of time to get the _Dawn_ back to a spaceport.  If the engine issue isn't that bad, maybe she'll last you all the way back to Earth so you can collect your paycheck and do a proper diagnostic.`)
+  game.say(`Speaking of which, examining the engine is probably the next order of business - if it's gonna keep dropping out of hyperspace on you then this is going to be a long trip home.`)
+
+  game.pause()
+  game.clear()
+  rules.printArea()
+})
+
+rules.onAfterCommand(command => {
+  if(command.verb.name !== 'take apart' || command.subject?.name !== 'mainframe') return;
+
+  const currentPhase = game.getProperty('gamePhase')
+  if(currentPhase < Phase.fixedLifeSupport)
+    throw new Error(`You really should worry about the CO<sub>2</sub> filter before doing anything with the mainframe.`)
+
+  if(currentPhase >= Phase.examinedMainframe)
+    throw new Error(`You've already taken the mainframe pretty well apart - you need that replacement capacitor.`)
+
+  game.setProperty('gamePhase', Phase.examinedMainframe)
+
+  const mainframe = game.findObjectByName('mainframe', ObjectType.Item) as Draft<Item>
+  mainframe.description = mainframe.description?.replace(/Of course.*/, `While the bulk of the mainframe is still there, you've currently taken apart the engine control systems.  Looks like there's a faulty capacitor in the engine regulator board, and you'll have to get a replacement from the comms room locker.`)
+
+  game.clear()
+
+  game.say(`At first glance the mainframe is working as expected - you can bring up the internal atmospheric readings, the operation logs, and anything else that doesn't need engine power.  The mainframe even kindly informs you there was some sort of anomalous power output from the engine before it cut from hyperjump, but when you try to bring the engine back online you hear a loud ***pop*** from behind the terminal and start to smell smoke.`)
+
+  game.pause()
+  game.clear()
+
+  game.say(`Upon further inspection, it looks like there's a faulty capacitor in the engine regulator board.  That would explain the power anomalies - these sort of caps always act a bit weird before they blow completely.`)
+  game.say(`The _Dawn_ is old enough (and this issue is common with her model of ship) so you luckily have a spare capacitor or two in the comms room locker - although finding a way through the security doors might be a bit tricky.`)
+
+  game.pause()
+  game.clear()
+  rules.printArea()
 })

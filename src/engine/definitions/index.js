@@ -11,5 +11,6 @@ export default [
   require('./options'),
   require('./map'),
   require('./hint'),
-  require('./start')
+  require('./start'),
+  require('./take-apart')
 ]

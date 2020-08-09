@@ -62,6 +62,14 @@ Large, metal retractable doors designed to keep air from escaping through them.
 medDoor.aliases = ['security doors', 'door', 'doors']
 medDoor.printableName = 'security doors'
 
+const filter = game.addItem('filter', `
+Largest of the medical bay equipment, the CO<sub>2</sub> filter looks sort of
+like a large air conditioning unit.  It is currently switched off.
+`, 'medbay')
+
+filter.aliases = ['co2 filter', 'co2', 'life support']
+filter.printableName = 'CO<sub>2</sub> filter'
+
 
 game.addRoom('stairupper', 'Upper Stairwell', `
 A large window in the aft wall shows the view of an unknown star system
@@ -92,8 +100,7 @@ Filling almost the entire room, the mainframe serves as the ship's primary contr
 computer.  It regulates engine power, controls the navigation and piloting systems,
 and even has a few games built in!
 
-Of course, with the engine not running the mainframe is currently in low power
-mode - you'll have to start the engine up again to restore full functionality.
+Of course, with the engine not running the mainframe is currently in low power mode - you'll have to start the engine up again to restore full functionality.
 `, 'mainframe')
 computer.aliases.push('computer')
 computer.aliases.push('engine controller')
@@ -111,6 +118,15 @@ Even running on standby power, your view through the window of the engine is ove
 
 At full power the windows have to be polarized to block the blinding glow of the engine's warp singularity - as it is, it's relatively safe to look at.
 `, 'engine')
+
+const chair = game.addItem('chair', `
+An odd three-legged construction, made of one large beam curving all the way from the
+back of the chair to the floor, with two side legs affixed at the sides.  Your
+experience has shown that this model of chair is **very** sturdy.
+`, 'engine')
+
+chair.carryable = true
+
 
 game.addRoom('docking', 'Docking Bay', `
 A long and wide room for loading and unloading cargo.  The

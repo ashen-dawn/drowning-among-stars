@@ -55,11 +55,11 @@ export default function Map() {
             <h3>{currentRoom.printableName}</h3>
             {currentRoom.visited
               ? (<>
-                <ReactMarkdown>{currentRoom.description}</ReactMarkdown>
+                <ReactMarkdown escapeHtml={false}>{currentRoom.description}</ReactMarkdown>
                 {itemsInRoom.length > 0 && (<>
                   <p>You {(playerLocation === roomName) ? 'see' : 'recall seeing'} the following items here:</p>
                   <ul>
-                    {itemsInRoom.map(({name, printableName}) => <li>{printableName || name}</li>)}
+                    {itemsInRoom.map(({name, printableName}) => <li><ReactMarkdown escapeHtml={false}>{printableName || name}</ReactMarkdown></li>)}
                   </ul>
                 </>)}
               </>)

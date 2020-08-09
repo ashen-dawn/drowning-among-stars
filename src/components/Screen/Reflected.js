@@ -16,7 +16,7 @@ export default function Text({promptVisible, messages, currentInput, currentScro
       <div ref={outputRef} className={styles.output}>
         {messages.map((message, i) => {
           if(message.type === 'message')
-            return <ReactMarkdown key={i}>{message.message}</ReactMarkdown>
+            return <ReactMarkdown escapeHtml={false} key={i}>{message.message}</ReactMarkdown>
 
           if(message.type === 'command')
             return <p key={i} className={styles.command}>{message.command}</p>
