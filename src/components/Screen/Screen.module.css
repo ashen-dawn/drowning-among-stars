@@ -32,6 +32,8 @@
   padding: 16px;
   padding-top: 0;
   font-weight: bold;
+  display: flex;
+  flex-direction: row;
 }
 
 .hidden {

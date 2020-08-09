@@ -117,7 +117,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
             )}
           </div>
           <form style={{pointerEvents: currentMenu ? 'none' : 'initial'}} className={styles.input + (!promptVisible ? ' ' + styles.hidden : '')} onSubmit={onSubmit}>
-            <input autoFocus ref={inputRef} readOnly={(promptVisible && !currentMenu) ? undefined : ''} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
+            <input autoComplete="off" autoFocus ref={inputRef} readOnly={(promptVisible && !currentMenu) ? undefined : ''} onChange={ev => setCurrentInput(ev.target.value)} id="gameInput"/>
           </form>
         </ScreenContext.Provider>
       </div>

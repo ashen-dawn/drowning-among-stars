@@ -27,7 +27,7 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
 
   parser.understand('openItem')
     .as('open [item]')
-    .as('open [item] with [item]')
+    .as('open [item] with [item|object]')
 
   rules.onCommand('openItem', () => {
     game.say(`You don't believe that can be opened!`)

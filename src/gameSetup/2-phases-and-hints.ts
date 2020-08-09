@@ -3,6 +3,8 @@ import {game} from '../engine'
 export enum Phase {
   wakeUp,
   hasFlashlight,
+  checkedUnderSink,
+  gotWrench,
   openedSinkPanel,
   droppedBelow,
   fixedLifeSupport,
@@ -24,6 +26,8 @@ export enum Phase {
 export const hints : Map<Phase, string> = new Map()
 hints.set(Phase.wakeUp, 'You may be able to assess your situation better if you retrieve your flashlight.')
 hints.set(Phase.hasFlashlight, 'With the security door shut and power cut off, you\'ll have to find another way into the rest of the ship.')
+hints.set(Phase.checkedUnderSink, `There is a panel under the sink that you might be able to fit through - you'll need a wrench to get it open though.`)
+hints.set(Phase.gotWrench, `You have a wrench and can open the panel under the sink.`)
 hints.set(Phase.openedSinkPanel, 'You can get to the lower deck through the panel under the sink, but be sure not to leave anything behind!')
 hints.set(Phase.droppedBelow, 'You need to re-start the CO2 scrubber before you run out of clean air.')
 hints.set(Phase.fixedLifeSupport, 'While the immediate threat to your life has been solved, you need to bring the engine back on so you can restore power to your ship.')
