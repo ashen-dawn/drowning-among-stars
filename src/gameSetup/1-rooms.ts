@@ -95,6 +95,10 @@ rules.onBeforeCommand(command => {
   if(command.verb.name !== 'openItem') return;
   if(command.subject?.name !== 'floor panel') return;
 
+  const wrench = game.findObjectByName('wrench', ObjectType.Item) as Item
+  if(wrench?.location !== 'inventory')
+    throw new Error(`It's bolted down pretty tightly - you'll need a tool to open this panel.`)
+
   game.setNeighbor('bathroom', 'down', 'docking')
   if(game.getProperty('gamePhase') < Phase.openedSinkPanel)
     game.setProperty('gamePhase', Phase.openedSinkPanel)

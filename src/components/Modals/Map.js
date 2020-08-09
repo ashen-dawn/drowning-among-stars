@@ -22,7 +22,7 @@ export default function Map() {
   }, []) // eslint-disable-line
 
   const currentRoom = (roomName && gameState.rooms.get(roomName)) || null
-  const itemsInRoom = Array.from(gameState.items.values()).filter(({lastKnownLocation}) => lastKnownLocation === roomName)
+  const itemsInRoom = Array.from(gameState.items.values()).filter(({lastKnownLocation, location}) => lastKnownLocation === roomName && location !== 'inventory')
 
   return (
     <div className={styles.map}>

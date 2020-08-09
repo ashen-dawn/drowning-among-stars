@@ -185,7 +185,7 @@ export default class Game {
       type: ObjectType.Item,
       name, aliases: [], printableName: name, description,
       location,
-      seen: false,
+      seen: location === this.getCurrentRoom()?.name,
       carryable
     }
 
