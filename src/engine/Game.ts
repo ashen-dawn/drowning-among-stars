@@ -127,10 +127,14 @@ export default class Game {
   createProperty(key : string, value : any) {
     let state = this.getState()
 
-    if(state.properties.has(key))
+    if(this.hasProperty(key))
       throw new Error(`Game prop ${key} has already been defined`)
 
     state.properties.set(key, value)
+  }
+
+  hasProperty(key : string) : boolean {
+    return this.getState().properties.has(key)
   }
 
   setProperty(key : string, value : any) {
@@ -181,12 +185,17 @@ export default class Game {
   }
 
   addItem(name : string, description : string, location : string, carryable : boolean = false) : Draft<Item> {
-    let item : Item = {
+    let item : Draft<Item> = {
       type: ObjectType.Item,
       name, aliases: [], printableName: name, description,
       location,
-      seen: location === this.getCurrentRoom()?.name,
+      seen: false,
       carryable
+    }
+
+    if(location === this.getCurrentRoom()?.name){
+      item.seen = true
+      item.lastKnownLocation = location
     }
 
     let state = this.getState()

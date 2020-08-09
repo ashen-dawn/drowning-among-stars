@@ -59,7 +59,7 @@ export default function Map() {
                 {itemsInRoom.length > 0 && (<>
                   <p>You {(playerLocation === roomName) ? 'see' : 'recall seeing'} the following items here:</p>
                   <ul>
-                    {itemsInRoom.map(({name}) => <li>{name}</li>)}
+                    {itemsInRoom.map(({name, printableName}) => <li>{printableName || name}</li>)}
                   </ul>
                 </>)}
               </>)

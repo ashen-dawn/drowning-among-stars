@@ -13,15 +13,12 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
     const current = game.getCurrentRoom()
 
     const neighborName = current?.neighbors.get(direction.name)
-    
+
     let lookingAt = game.findObjectByName(neighborName, ObjectType.Room)
                  || game.findObjectByName(neighborName, ObjectType.Door)
 
-    if(!lookingAt){
-      console.warn(`Unable to find object ${neighborName}`)
-      game.say(`You cannot go ${direction.name}`)
-      return;
-    }
+    if(!lookingAt)
+      throw new Error(`You cannot go ${direction.name}`)
 
     let room = lookingAt
     if(lookingAt.type === ObjectType.Door) {

@@ -50,7 +50,6 @@ export default function Help({parentRef}) {
       <li>take [thing]</li>
       <li>drop [thing]</li>
       <li>open [thing]</li>
-      <li>close [thing]</li>
     </ul>
   </>
 }

@@ -110,7 +110,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
           <div ref={outputRef} onScroll={() => setCurrentScroll(outputRef.current?.scrollTop)} className={styles.output + (!!currentMenu ? ' ' + styles.noMouse : '')}>
             {finalMessages.map((message, i) => {
               if(message.type === 'message')
-                return <ReactMarkdown key={i}>{message.message}</ReactMarkdown>
+                return <ReactMarkdown escapeHtml={false} key={i}>{message.message}</ReactMarkdown>
 
               if(message.type === 'command')
                 return <p key={i} className={styles.command}>{message.command}</p>
