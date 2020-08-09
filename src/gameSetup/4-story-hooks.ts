@@ -31,7 +31,7 @@ rules.onAfterCommand(command => {
 
   game.clear()
 
-  game.say(`You click the light on and glance around, sighing. The Dawn has certainly seen better days.  She flies just fine, but assuming you survive you'll definitely have to use the money from this job to finally replace all the rusty patches with new parts.`)
+  game.say(`You click the light on and glance around, sighing. The _Dawn_ has certainly seen better days.  She flies just fine, but assuming you survive you'll definitely have to use the money from this job to finally replace all the rusty patches with new parts.`)
   game.say(`It figures that the easy delivery would turn out to be the one where you have the most problems.  All you had to do was take a few sealed boxes to the far side of the galaxy and then fly back - no sneaking, no lying, no fighting or anything!`)
   game.pause()
   game.clear()
@@ -58,13 +58,13 @@ rules.onAfterCommand(command => {
   game.clear()
 
   game.say(`You suppose this kind of equipment failure is inevitable, although it's a bit strange since you had the engine checked last week.  It was the same cousin who checked the engine as who told you about this job actually.`)
-  game.say(`"Listen, I know you don't want to get involved in the synth trade but it's just one supply run and they can pay you a lot for it."  Wren had said.  "I'd do it myself but the Aurora's a flying collection of scrap at this point, and you know how I hate having to find new pilots."`)
+  game.say(`"Listen, I know you don't want to get involved in the synth trade but it's just one supply run and they can pay you a lot for it."  Wren had said.  "I'd do it myself but the _Aurora's_ a flying collection of scrap at this point, and you know how I hate having to find new pilots."`)
 
   game.pause()
   game.clear()
 
-  game.say(`You had groaned at that.  "And you think the Ashen Dawn is in any better condition?  That's why I brought her to you, numbskull."`)
-  game.say(`Wren's grin was wide, but knowing. "Listen, after I fix her up let me introduce you to my client Rosalyn - it's a simple supply run, and would be a good shakedown for Dawn after the repairs."`)
+  game.say(`You had groaned at that.  "And you think the _Ashen Dawn_ is in any better condition?  That's why I brought her to you, numbskull."`)
+  game.say(`Wren's grin was wide, but knowing. "Listen, after I fix her up let me introduce you to my client Rosalyn - it's a simple supply run, and would be a good shakedown for _Dawn_ after the repairs."`)
 
   game.pause()
   game.clear()

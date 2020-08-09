@@ -29,7 +29,7 @@ export default class Game {
 
   constructor() {
     let state = this.getState()
-    state.directions.set('fore', {type: ObjectType.Direction, name: 'fore', printableName: 'fore', aliases: ['north', 'f', 'n'], opposite: 'aft'})
+    state.directions.set('fore', {type: ObjectType.Direction, name: 'fore', printableName: 'fore', aliases: ['north', 'f', 'n', 'forward', 'foreward'], opposite: 'aft'})
     state.directions.set('starboard', {type: ObjectType.Direction, name: 'starboard', printableName: 'starboard', aliases: ['east', 'sb', 'e'], opposite: 'port'})
     state.directions.set('aft', {type: ObjectType.Direction, name: 'aft', printableName: 'aft', aliases: ['south', 'a', 's'], opposite: 'fore'})
     state.directions.set('port', {type: ObjectType.Direction, name: 'port', printableName: 'port', aliases: ['west', 'p', 'w'], opposite: 'starboard'})
