@@ -24,7 +24,7 @@ export enum Phase {
 
 // TODO: Replace [thing]
 export const hints : Map<Phase, string> = new Map()
-hints.set(Phase.wakeUp, 'You may be able to assess your situation better if you retrieve your flashlight.')
+hints.set(Phase.wakeUp, 'You may be able to assess your situation better if you find a light.')
 hints.set(Phase.hasFlashlight, 'With the security door shut and power cut off, you\'ll have to find another way into the rest of the ship.')
 hints.set(Phase.checkedUnderSink, `There is a panel under the sink that you might be able to fit through - you'll need a wrench to get it open though.`)
 hints.set(Phase.gotWrench, `You have a wrench and can open the panel under the sink.`)
@@ -44,4 +44,6 @@ hints.set(Phase.returnedUpToBathroom, 'Someone locked the comms room locker.  Th
 hints.set(Phase.hasKey, `You've retrieved the spare key to the comms locker, and can finally get the [thing] to repair the mainframe.`)
 hints.set(Phase.unlockedLocker, 'Locker is empty - whoever was in your ship made sure you wouldn\'t be able to repair it.')
 
-game.createProperty('gamePhase', Phase.wakeUp)
+setImmediate(() => {
+  game.createProperty('gamePhase', Phase.wakeUp)
+})

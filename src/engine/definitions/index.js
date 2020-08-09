@@ -9,5 +9,6 @@ export default [
   require('./inventory'),
   require('./help'),
   require('./options'),
-  require('./map')
+  require('./map'),
+  require('./hint')
 ]

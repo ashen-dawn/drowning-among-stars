@@ -1,4 +1,7 @@
 import {game, rules} from '../engine'
+import { ObjectType, Item } from '../engine/types/GameState'
+import { Draft } from 'immer'
+import { Phase } from './2-phases-and-hints'
 
 /**
  * Cabin
@@ -18,14 +21,27 @@ rules.on('beforePrintItems', () => {
     throw new Error('You cannot make out much more without light.')
 })
 
+// After picking up flashlight, update game phase
 rules.onAfterCommand(() => {
   const state = game.getState()
 
   const flashlightLocation = state.items.get('flashlight')?.location
   const wrenchExists = state.items.has('wrench')
 
-  if(flashlightLocation === 'inventory' && !wrenchExists)
+  if(flashlightLocation === 'inventory' && !wrenchExists){
+    if(game.getProperty('gamePhase') < Phase.hasFlashlight)
+      game.setProperty('gamePhase', Phase.hasFlashlight)
     game.addItem('wrench', 'Just generally useful for repairs and adjustments to the various mechanical parts of the ship.', 'cabin')
+  }
+})
+
+// After picking up wrench, update game phase
+rules.onAfterCommand(command => {
+  if(command.verb.name !== 'take' || command.subject?.name !== 'wrench')
+    return
+
+  if(game.getProperty('gamePhase') < Phase.gotWrench)
+    game.setProperty('gamePhase', Phase.gotWrench)
 })
 
 /**
@@ -43,6 +59,51 @@ const flashlight = game.addItem('flashlight', 'Metal rod with some LEDs embedded
 flashlight.aliases.push('flash light')
 flashlight.aliases.push('light')
 flashlight.aliases.push('torch')
+
+const cupboard = game.addItem('cabinet', 'A metal cupboard beneath the sink.  It is currently closed.', 'bathroom')
+cupboard.aliases.push('cupboard')
+cupboard.aliases.push('cupboard door')
+cupboard.aliases.push('cabinet door')
+
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'openItem') return;
+  if(command.subject?.name !== 'cabinet') return;
+
+  const wrench = game.findObjectByName('wrench', ObjectType.Item) as Item
+
+  const item = game.findObjectByName('cabinet', ObjectType.Item) as Draft<Item>
+  item.description = `
+A small metal cupboard beneath the sing.  It is currently open.
+
+At the bottom of the cupboard you see a loose metal panel you might be able to fit through.
+  `
+
+  const sinkPanel = game.addItem('floor panel', 'A loose metal panel in the bathroom floor.', 'bathroom')
+  sinkPanel.aliases.push('panel')
+  sinkPanel.aliases.push('loose panel')
+
+  if(wrench?.location === 'inventory')
+    game.setProperty('gamePhase', Phase.gotWrench)
+  else
+    game.setProperty('gamePhase', Phase.checkedUnderSink)
+
+  // Prevent normal command execution
+  throw new Error('You open the sink cupboard, revealing a loose metal panel in the bathroom floor.')
+})
+
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'openItem') return;
+  if(command.subject?.name !== 'floor panel') return;
+
+  game.setNeighbor('bathroom', 'down', 'docking')
+  if(game.getProperty('gamePhase') < Phase.openedSinkPanel)
+    game.setProperty('gamePhase', Phase.openedSinkPanel)
+
+  const panel = game.findObjectByName('floor panel', ObjectType.Item) as Draft<Item>
+  panel.printableName = 'hole in the floor'
+
+  throw new Error('It takes you a few minutes, but eventually you pull up the floor panel.  You should be able to get down to the docking bay from here.')
+})
 
 /**
  * Comms
@@ -122,6 +183,3 @@ game.setNeighbor('stairupper', 'down', 'stairlower')
 game.setNeighbor('stairlower', 'fore', 'mainframe')
 game.setNeighbor('mainframe', 'starboard', 'engine')
 game.setNeighbor('engine', 'starboard', 'docking')
-
-// Secret passageways
-game.setNeighbor('bathroom', 'down', 'docking')

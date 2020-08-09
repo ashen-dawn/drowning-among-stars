@@ -25,7 +25,12 @@ export default class Parser {
 
     try {
       renderer.hidePrompt()
+      let start = window.performance.now()
       await this.runCommand(rawCommand)
+      let end = window.performance.now()
+
+      if(end - start > 200)
+        console.warn(`Command execution took ${end - start}ms`)
       await timer
     } catch (err) {
       await timer
