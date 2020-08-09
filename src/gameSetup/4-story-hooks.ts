@@ -160,6 +160,9 @@ rules.onAfterCommand(command => {
   const mainframe = game.findObjectByName('mainframe', ObjectType.Item) as Draft<Item>
   mainframe.description = mainframe.description?.replace(/Of course.*/, `While the bulk of the mainframe is still there, you've currently taken apart the engine control systems.  Looks like there's a faulty capacitor in the engine regulator board, and you'll have to get a replacement from the comms room locker.`)
 
+  if(!game.hasProperty('examinedMainframe'))
+    game.createProperty('examinedMainframe', true)
+
   game.clear()
 
   game.say(`At first glance the mainframe is working as expected - you can bring up the internal atmospheric readings, the operation logs, and anything else that doesn't need engine power.  The mainframe even kindly informs you there was some sort of anomalous power output from the engine before it cut from hyperjump, but when you try to bring the engine back online you hear a loud ***pop*** from behind the terminal and start to smell smoke.`)

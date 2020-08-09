@@ -4,7 +4,7 @@ export default [
   require('./lookAt'),
   require('./go'),
   require('./open'),
-  require('./unlockDoor'),
+  // require('./unlockDoor'),
   require('./take-drop'),
   require('./inventory'),
   require('./help'),

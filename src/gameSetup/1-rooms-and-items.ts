@@ -67,7 +67,7 @@ Largest of the medical bay equipment, the CO<sub>2</sub> filter looks sort of
 like a large air conditioning unit.  It is currently switched off.
 `, 'medbay')
 
-filter.aliases = ['co2 filter', 'co2', 'life support']
+filter.aliases = ['co2 filter', 'co2', 'life support', 'scrubber']
 filter.printableName = 'CO<sub>2</sub> filter'
 
 

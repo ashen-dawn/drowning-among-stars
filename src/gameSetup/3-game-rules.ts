@@ -260,3 +260,86 @@ rules.onBeforeCommand(command => {
   if(currentPhase >= Phase.examinedMainframe)
     throw new Error(`You won't be able to repair the mainframe's control system without the replacement capacitor from the comms room.`)
 })
+
+/**
+ * Hint for examining door
+ */
+rules.onAfterCommand(command => {
+  if(!(((command.verb.name === 'lookAt' || command.verb.name === 'openDoor')) && (command.subject?.name === 'med door' || command.subject?.name === 'cabin door')))
+    return;
+
+  const currentPhase = game.getProperty('gamePhase')
+
+  if(Phase.examinedMainframe <= currentPhase && currentPhase < Phase.examinedDoor)
+    game.setProperty('gamePhase', Phase.examinedDoor)
+})
+
+/**
+ * Hint for examining chair
+ */
+rules.onAfterCommand(command => {
+  if(!(command.verb.name === 'lookAt' && command.subject?.name === 'chair'))
+    return;
+
+  const currentPhase = game.getProperty('gamePhase')
+  if(Phase.examinedMainframe <= currentPhase && currentPhase < Phase.examinedChair){
+    game.setProperty('gamePhase', Phase.examinedChair)
+  }
+})
+
+/**
+ * Taking apart chair
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'take apart' || command.subject?.name !== 'chair') return
+
+  const wrench = game.findObjectByName('wrench', ObjectType.Item) as Draft<Item>
+  if(wrench?.location !== 'inventory')
+    throw new Error(`You do not have the proper tools to take this apart.`)
+
+  const currentPhase = game.getProperty('gamePhase')
+
+  if(currentPhase < Phase.fixedLifeSupport)
+    throw new Error(`You should take care of the CO<sub>2</sub> scrubber before you get distracted taking things apart.`)
+
+  if(currentPhase < Phase.destroyedChair){
+    if(game.hasProperty('examinedMainframe')){
+      game.say(`The chair's center leg should give you enough leverage to force open the security door, but as you finish taking it apart you remember something that bothers you: if you're not mistaken, that regulator board was brand new.  Even when they've gone bad in the past you've usually been able to get a good week or two of use out of them before they failed completely, so seeing one fail this early is definitely unusual.`)
+      game.say(`You can't remember for sure if that board was replaced in the last refit though, and you'd have to check the work log Wren gave you to be sure.  You try to push that idea aside for now - no sense in worrying about it now.`)
+    } else {
+      game.say(`Twisting the bolts out of place, you are soon left with one long metal rod, and a small pile of miscelaneous pieces.`)
+    }
+
+    game.setProperty('gamePhase', Phase.destroyedChair)
+    game.addItem('chair leg', 'A sturdy, curved piece of metal about a meter and a half long.', 'inventory')
+
+    const chair = game.findObjectByName('chair', ObjectType.Item) as Draft<Item>
+    chair.location = 'bridge'
+    chair.description += `\n\nHopefully you won't have to destroy this one.`
+    chair.lastKnownLocation = undefined
+
+    game.say(`(You place the chair leg in your inventory)`)
+
+    throw new Error()
+  }
+})
+
+/**
+ * Prevent going back up if chair is not in docking room
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'go' || command.subject?.name !== 'up' || game.getCurrentRoom()?.name !== 'docking')
+    return
+
+  const chair = game.findObjectByName('chair', ObjectType.Item) as Draft<Item>
+  if(chair.location === 'inventory'){
+    game.say(`(First putting the chair down)`)
+    chair.location = game.getCurrentRoom()!.name
+  }
+
+  if(chair.location !== game.getCurrentRoom()!.name) {
+    throw new Error(`You cannot reach the hole in the ceiling - you might need to find something to stand on.`)
+  }
+
+  game.say(`Climbing on the chair, you just barely manage to reach up to the hole in the ceiling.`)
+})
