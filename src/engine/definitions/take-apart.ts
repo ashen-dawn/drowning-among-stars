@@ -5,6 +5,7 @@ import Game from "../Game";
 export default function(parser : Parser, rules : RulesEngine, game : Game) {
   parser.understand('take apart')
     .as('take apart [item]')
+    .as('take [item] apart')
     .as('disassemble [item]')
     .as('dissassemble [item]')
 

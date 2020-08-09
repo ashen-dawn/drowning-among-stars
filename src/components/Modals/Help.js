@@ -53,6 +53,9 @@ export default function Help({parentRef}) {
       <li>turn on [thing]</li>
       <li>take apart [thing]</li>
     </ul>
+    <p>
+      Finally, if you get stuck on how to solve a puzzle, try the <Cmd>hint</Cmd> command.
+    </p>
   </>
 }
 

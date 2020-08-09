@@ -149,4 +149,4 @@ game.setNeighbor('cabin', 'port', 'comms')
 game.setNeighbor('medbay', 'starboard', 'comms')
 
 // DEBUG hallways
-game.setNeighbor('bathroom', 'down', 'docking')
+// game.setNeighbor('bathroom', 'down', 'docking')

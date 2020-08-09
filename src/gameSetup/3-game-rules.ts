@@ -34,6 +34,15 @@ rules.onBeforeCommand(command => {
   if(command.verb.name !== 'go' || playerLocation !== 'medbay' || command.subject?.name !== 'starboard')
     return;
 
+  if((game.findObjectByName('chair leg', ObjectType.Item) as Item)?.location === 'inventory') {
+    try {
+      parser.runCommand(`open door with chair leg`)
+    } catch {
+      game.pause()
+      game.clear()
+    }
+  }
+
   if(game.getProperty('gamePhase') < Phase.openedDoor)
     throw new Error(`The security doors have sealed - you're either going to need to restart the mainframe or find a way to force these open before you can access the comms room.`)
 })
@@ -43,7 +52,7 @@ rules.onBeforeCommand(command => {
  */
 rules.onBeforeCommand(command => {
   const playerLocation = game.getCurrentRoom()?.name
-  if(command.verb.name !== 'openItem' || !command.subject?.aliases.includes('security doors'))
+  if(command.verb.name !== 'openItem' || !command.subject?.aliases.includes('security doors') || command.object !== null)
     return;
 
   if(playerLocation === 'cabin')
@@ -311,11 +320,13 @@ rules.onBeforeCommand(command => {
     }
 
     game.setProperty('gamePhase', Phase.destroyedChair)
-    game.addItem('chair leg', 'A sturdy, curved piece of metal about a meter and a half long.', 'inventory')
+    const leg = game.addItem('chair leg', 'A sturdy, curved piece of metal about a meter and a half long.', 'inventory')
+    leg.aliases = ['leg', 'prybar', 'stick', 'rod', 'piece of metal']
+    leg.seen = true
 
     const chair = game.findObjectByName('chair', ObjectType.Item) as Draft<Item>
     chair.location = 'bridge'
-    chair.description += `\n\nHopefully you won't have to destroy this one.`
+    chair.description += `\n\nHopefully you won't have to destroy this one - they're actually rather expensive.`
     chair.lastKnownLocation = undefined
 
     game.say(`(You place the chair leg in your inventory)`)
@@ -342,4 +353,22 @@ rules.onBeforeCommand(command => {
   }
 
   game.say(`Climbing on the chair, you just barely manage to reach up to the hole in the ceiling.`)
+})
+
+/**
+ * Open door with leg
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'openItem' || command.subject?.name !== 'med door' || game.getCurrentRoom()?.name !== 'medbay')
+    return
+
+  game.say(`With an uncomfortable grinding noise, and much effort, the security doors slide open allowing you access to the comms room.`)
+  game.say(`Unfortunately it looks like your chair leg got caught in the mechanism - the good news is this door will stay open, the bad news is you're not getting that back.`)
+
+  game.getState().items.delete('med door')
+  game.getState().items.delete('chair leg')
+
+  game.setProperty('gamePhase', Phase.openedDoor)
+
+  throw new Error()
 })

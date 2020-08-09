@@ -8,6 +8,9 @@ export default function(parser : Parser, rules : RulesEngine, game : Game) {
   parser.understand('openItem')
     .as('open [item]')
     .as('open [item] with [item|object]')
+    .as('pry open [item] with [item|object]')
+    .as('unlock [item] with [item|object]')
+    .as('use [item|object] on [item]')
 
   rules.onCommand('openItem', () => {
     game.say(`You don't believe that can be opened!`)
