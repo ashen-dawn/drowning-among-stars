@@ -29,7 +29,8 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
   const printedMessages = !outputPaused ? messages : messages.slice(0, currentPause)
   const promptVisible = promptEnabled && !outputPaused
 
-  const clearedIndex = printedMessages.findIndex(message => message.type === 'clear')
+  const currentClear = [...printedMessages].reverse().find(message => message.type === 'clear')
+  const clearedIndex = printedMessages.indexOf(currentClear)
   const finalMessages = (clearedIndex < 0) ? printedMessages : printedMessages.slice(clearedIndex)
 
   async function onSubmit(ev) {
@@ -94,6 +95,12 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [currentPause, outputPaused, messages, currentMenu])
+
+  // Scroll after unpaused
+  useEffect(() => {
+    setImmediate(() => outputRef.current.scrollTop = outputRef.current.scrollHeight)
+    setCurrentScroll(outputRef.current.scrollHeight)
+  }, [currentPause])
 
   return (
     <>

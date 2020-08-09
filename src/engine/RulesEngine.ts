@@ -1,7 +1,7 @@
 import { ValidCommandDetails } from "./types/ParsedCommand";
 import Game from "./Game";
 import { EventEmitter } from "events";
-import printArea from "../utils/printArea"
+import {printLocDescription, printLocItems} from "../utils/printArea"
 
 // This class allows for hooking up "global events" for things such as checking
 // victory conditions, acting when play begins, or other such things.  These
@@ -15,6 +15,7 @@ export default class RulesEngine extends EventEmitter{
   constructor(game : Game) {
     super()
 
+    this.setMaxListeners(40)
     this.game = game
     this.on('beforeCommand', () => {this.lastLocation = game.getState().player.location})
     this.on('afterCommand', () => {
@@ -23,8 +24,24 @@ export default class RulesEngine extends EventEmitter{
     })
 
     this.on('locationChange', () => {
-      printArea(game)
+      this.printArea()
     })
+  }
+
+  printArea() : void {
+    try {
+      this.emit('beforePrintArea')
+      printLocDescription(this.game)
+    } catch (err) {
+      this.game.say(err.message)
+    }
+
+    try {
+      this.emit('beforePrintItems')
+      printLocItems(this.game)
+    } catch (err) {
+      this.game.say(err.message)
+    }
   }
 
   gameStart() {

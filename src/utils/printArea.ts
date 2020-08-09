@@ -1,11 +1,16 @@
 import capitalize from "./capitalize"
 import Game from "../engine/Game"
 
-export default function printArea(game : Game) {
+export function printLocDescription(game : Game) {
   const location = game.getCurrentRoom()!
+  console.log('printing')
 
   game.say(`**${capitalize(location.printableName)}**`)
   game.say(location.description!)
+}
+
+export function printLocItems(game : Game) {
+  const location = game.getCurrentRoom()!
 
   const items = game.findObjectsInRoom(location.name)
   const doors = game.findDoorsInRoom(location.name)
@@ -34,5 +39,4 @@ export default function printArea(game : Game) {
 
     game.say(youCanSee)
   }
-
 }
