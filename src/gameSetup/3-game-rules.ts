@@ -1,4 +1,4 @@
-import {game, rules, parser} from '../engine'
+import {game, rules, parser, renderer} from '../engine'
 import { ObjectType, Item } from '../engine/types/GameState'
 import { Draft } from 'immer'
 import { Phase } from './2-phases-and-hints'
@@ -21,6 +21,17 @@ rules.on('beforePrintItems', () => {
 rules.onBeforeCommand(command => {
   const playerLocation = game.getCurrentRoom()?.name
   if(command.verb.name !== 'go' || playerLocation !== 'cabin' || command.subject?.name !== 'port')
+    return;
+
+  throw new Error(`The security doors have sealed - you're either going to need to restart the mainframe or find a way to force these open before you can access the comms room.`)
+})
+
+/**
+ * Do not allow going east from comms
+ */
+rules.onBeforeCommand(command => {
+  const playerLocation = game.getCurrentRoom()?.name
+  if(command.verb.name !== 'go' || playerLocation !== 'comms' || command.subject?.name !== 'starboard')
     return;
 
   throw new Error(`The security doors have sealed - you're either going to need to restart the mainframe or find a way to force these open before you can access the comms room.`)
@@ -369,6 +380,33 @@ rules.onBeforeCommand(command => {
   game.getState().items.delete('chair leg')
 
   game.setProperty('gamePhase', Phase.openedDoor)
+
+  throw new Error()
+})
+
+/**
+ * Prevent locker from opening
+ */
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'openItem' || command.subject?.name !== 'locker')
+    return
+
+  if(game.getProperty('gamePhase') === Phase.hasKey) {
+    renderer.endGame()
+    setImmediate(() => rules.emit('gameEnd'))
+    throw new Error()
+  }
+
+  game.say(`
+The locker door rattles but will not open.
+
+"That's odd," you say, "I don't remember locking this..." but luckily you have
+a spare key.  You think for a moment and remember the key is in your other
+pants - those should be back in your cabin.
+  `)
+
+  if(game.getProperty('gamePhase') < Phase.examinedLocker)
+    game.setProperty('gamePhase', Phase.examinedLocker)
 
   throw new Error()
 })
