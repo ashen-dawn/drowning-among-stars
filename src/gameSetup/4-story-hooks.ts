@@ -96,6 +96,8 @@ rules.onAfterCommand(command => {
 
   game.say(`As you lower yourself down into the cargo bay you're struck by how empty it looks.  Normally this storage bay would have a lot more general-purpose supplies, but you had to clear it out to make room for this delivery.  Since you've dropped the cargo and were on your way to get paid, they're no longer here to fill that space.`)
   game.pause()
+  game.clear()
+
   game.say(`You weren't permitted to know what was in the boxes you delivered. "Wares to be sold in the outer markets," Rosalyn said when you asked.  "The less you know the less you have to worry." `)
   game.say(`You weren't even sure how heavy or light the boxes were - she arranged crews for loading and unloading ahead of time, and the time requirements for delivery were just close enough you hadn't dared stop to investigate along the way.  It really was as easy as Wren had said it would be...`)
 
@@ -176,4 +178,65 @@ rules.onAfterCommand(command => {
   game.pause()
   game.clear()
   rules.printArea()
+})
+
+rules.onBeforeCommand(command => {
+  if(command.verb.name !== 'go' || command.subject?.name !== 'fore' || game.getCurrentRoom()?.name !== 'mainframe')
+    return;
+
+  if(game.getProperty('gamePhase') < Phase.examinedLocker)
+    return;
+
+  game.say(`As you work your way back to your cabin you start to get a growing sense of unease.`)
+  game.say(`You don't want to believe it, but something is definitely suspicious about this engine failure - the part was brand new, and now a locker you've never locked in your life is shut tight.`)
+
+  game.pause()
+  game.clear()
+
+  game.say(`You don't think about it.  Rosalyn and the rest of her synth trade clients would definitely be willing to sabotage your ship, but they wouldn't have known enough to pull it off that quickly they had Wren's help.`)
+  game.say(`"Come on, Wren," you say to yourself, "don't let me down.  The spare will be where I left it, and everything will be all right."`)
+
+  game.pause()
+  game.clear()
+})
+
+/**
+ * Give player key after entering cabin with the proper game phase
+ */
+rules.onAfterCommand(command => {
+  if(command.verb.name !== 'go' || command.subject?.name !== 'fore' || game.getCurrentRoom()?.name !== 'cabin')
+    return;
+
+  if(game.getProperty('gamePhase') < Phase.examinedLocker)
+    return;
+
+  game.say(`Upon entering your cabin you quickly find your pants and retrieve the key.`)
+
+  const key = game.addItem('key', 'A small steel locker key - cheap, but easier than picking the lock every time.', 'inventory')
+  key.seen = true
+
+  game.say(`(You place the key in your inventory)`)
+
+  game.setProperty('gamePhase', Phase.hasKey)
+})
+
+/**
+ * Triggers on opening the locker
+ */
+rules.on('gameEnd', () => {
+  game.clear()
+
+  game.say(`The key turns in the lock with a sharp ***click***.  As you swing open the locker your heart drops.`)
+  game.say(`"No Wren," you mutter, "you didn't!"  But the empty locker before you is evidence that he did.`)
+
+  game.pause()
+  game.clear()
+
+  game.say(`It figures that the easy job was too good to be true.`)
+
+  game.pause()
+  game.clear()
+
+  game.say(`<div style="margin-top: 122px; text-align: center">[GAME OVER]</div>`)
+  game.say(`<div style="text-align:center; opacity: .6">(Reload the page to play again)</div>`)
 })

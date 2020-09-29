@@ -18,11 +18,18 @@ export default class Renderer {
   private target : HTMLElement | null = null
   private promptVisible : boolean = true
   private videoSettingsSet : boolean = !!window.localStorage.getItem('video')
+  private gameEnded : boolean = false
 
   constructor(parser : Parser, game : Game, rules : RulesEngine) {
     this.parser = parser
     this.game = game
     this.rules = rules
+  }
+
+  endGame() {
+    this.gameEnded = true
+    this.promptVisible = false
+    this.render()
   }
 
   start(target : HTMLElement | null) {
@@ -37,7 +44,8 @@ export default class Renderer {
   }
 
   public showPrompt() {
-    this.promptVisible = true;
+    if(!this.gameEnded)
+      this.promptVisible = true;
     this.render()
   }
 

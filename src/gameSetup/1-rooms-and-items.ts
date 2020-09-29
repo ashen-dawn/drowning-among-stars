@@ -1,7 +1,8 @@
 import {game} from '../engine'
 
 game.addRoom('cabin', 'Crew Cabin', `
-A dark and dingy room with a single bunk bed along the starboard side.
+A dark and dingy room with a single bunk bed along the starboard side, and a few
+piles of discarded clothes strewn about the room.
 
 The washroom is to the aft, with the comms room to port.
 `)
@@ -37,6 +38,13 @@ A wide room with pipes and cabling running thick through the floor.
 The bridge is to the fore, the medbay to port, and the crew cabin to starboard.
 There is a large storage locker on the aft wall of the room.
 `)
+
+game.addItem('locker', `
+Recessed into the aft wall, you use this locker to store various odds and
+ends.  Spare parts, cleaning supplies, etc.
+
+It is locked.
+`, 'comms')
 
 game.addRoom('bridge', 'Bridge', `
 A lone chair sits in the center of the room, surrounded with computer
