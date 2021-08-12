@@ -10,6 +10,7 @@ Tested in Firefox and Chrome; it's playable in Edge but I don't recommend it (pr
 
  - Classic command-driven text adventure
  - Space!
+ - Ray-traced graphics\*
  - In-game map, inventory, and help UI
  - Potential sabotage?
  - Built in hint system
@@ -20,6 +21,6 @@ Tested in Firefox and Chrome; it's playable in Edge but I don't recommend it (pr
  - The "last seen location" for items sometimes does not update correctly.
  - When long sections of text are printed, the beginning of the text can be pushed out the top of the screen (although you should still be able to read it by scrolling up).
 
-* This isn't even a joke! Okay no it is a joke, but it's not a lie.  The background image was modeled in Blender and then rendered in the raytracing engine Cycles.  The resulting image is used as a static background, but it was raytraced and is the largest of three graphics in the game so it counts.
+\* This isn't even a joke! Okay no it is a joke, but it's not a lie.  The background image was modeled in Blender and then rendered in the raytracing engine Cycles.  The resulting image is used as a static background, but it was raytraced and is the largest of three graphics in the game so it counts.
 
 What?  Don't look at me like that - I'm not a wizard, and RTX definitely isn't supported in Javascript yet so this is as good as you're getting for now.
