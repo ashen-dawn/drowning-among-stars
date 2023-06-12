@@ -1,16 +1,29 @@
+import look from './look'
+import lookDirection from './lookDirection'
+import lookAt from './lookAt'
+import go from './go'
+import open from './open'
+import takeDrop from './take-drop'
+import inventory from './inventory'
+import help from './help'
+import options from './options'
+import map from './map'
+import hint from './hint'
+import start from './start'
+import takeApart from './take-apart'
+
 export default [
-  require('./look'),
-  require('./lookDirection'),
-  require('./lookAt'),
-  require('./go'),
-  require('./open'),
-  // require('./unlockDoor'),
-  require('./take-drop'),
-  require('./inventory'),
-  require('./help'),
-  require('./options'),
-  require('./map'),
-  require('./hint'),
-  require('./start'),
-  require('./take-apart')
+  look,
+  lookDirection,
+  lookAt,
+  go,
+  open,
+  takeDrop,
+  inventory,
+  help,
+  options,
+  map,
+  hint,
+  start,
+  takeApart
 ]

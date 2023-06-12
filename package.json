@@ -1,53 +1,30 @@
 {
   "name": "icantwrite",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "@types/jest": "^26.0.5",
-    "@types/node": "^14.0.24",
-    "@types/react": "^16.9.43",
-    "@types/react-dom": "^16.9.8",
-    "auto-bind": "^4.0.0",
-    "immer": "^7.0.5",
-    "luxon": "^1.24.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1",
-    "react-scripts": "3.4.1",
-    "redux": "^4.0.5",
-    "typescript": "^3.9.7"
-  },
-  "scripts": {
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "export": "npm run build && grunt build",
-    "publish": "npm run export && grunt publish"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "events": "^3.3.0",
+    "immer": "^10.0.2",
+    "luxon": "^3.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.7"
   },
   "devDependencies": {
-    "@types/webpack-env": "^1.15.2",
-    "grunt": "^1.2.1",
-    "grunt-contrib-compress": "^1.6.0",
-    "grunt-run": "^0.8.1",
-    "grunt-sed": "^0.1.1"
+    "@types/react": "^18.2.9",
+    "@types/react-dom": "^18.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.42.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9",
+    "vite-plugin-svgr": "^3.2.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
   }
 }

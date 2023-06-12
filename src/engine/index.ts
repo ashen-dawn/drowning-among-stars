@@ -9,6 +9,6 @@ export const rules = new RulesEngine(game)
 export const parser = new Parser(game, rules)
 export const renderer = new Renderer(parser, game, rules)
 
-for(const {default: func} of definitions) {
+for (const func of definitions) {
   func(parser, rules, game)
 }
