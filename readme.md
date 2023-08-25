@@ -6,6 +6,10 @@ This game was created for the [I Can't Write (But Want to Tell a Story)](https:/
 
 Tested in Firefox and Chrome; it's playable in Edge but I don't recommend it (practically all the visual effects are broken, and the way it renders the background makes text very hard to read); I don't have a machine capable of testing it with Safari so your mileage may vary.
 
+## Play Online
+
+There is a live version of this game at [drowning.ashen.earth](https://drowning.ashen.earth)
+
 ### Features:
 
  - Classic command-driven text adventure
