@@ -49,7 +49,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
     }
 
     if(outputRef.current) {
-      setImmediate(() => outputRef.current.scrollTop = outputRef.current.scrollHeight)
+      setTimeout(() => outputRef.current.scrollTop = outputRef.current.scrollHeight, 0)
       setCurrentScroll(outputRef.current.scrollHeight)
     }
   }
@@ -100,7 +100,7 @@ export default function Text({promptVisible: promptEnabled, handleCommand, showR
 
   // Scroll after unpaused
   useEffect(() => {
-    setImmediate(() => outputRef.current.scrollTop = outputRef.current.scrollHeight)
+    setTimeout(() => outputRef.current.scrollTop = outputRef.current.scrollHeight, 0)
     setCurrentScroll(outputRef.current.scrollHeight)
   }, [currentPause])
 

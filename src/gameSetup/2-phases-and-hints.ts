@@ -43,6 +43,6 @@ hints.set(Phase.returnedUpToBathroom, 'Someone locked the comms room locker.  Th
 hints.set(Phase.hasKey, `You've retrieved the spare key to the comms locker, and can finally get the capacitor to repair the mainframe.`)
 hints.set(Phase.unlockedLocker, 'Locker is empty - whoever was in your ship made sure you wouldn\'t be able to repair it.')
 
-setImmediate(() => {
+setTimeout(() => {
   game.createProperty('gamePhase', Phase.wakeUp)
-})
+}, 0)

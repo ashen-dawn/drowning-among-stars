@@ -393,7 +393,7 @@ rules.onBeforeCommand(command => {
 
   if(game.getProperty('gamePhase') === Phase.hasKey) {
     renderer.endGame()
-    setImmediate(() => rules.emit('gameEnd'))
+    setTimeout(() => rules.emit('gameEnd'), 0)
     throw new Error()
   }
 
